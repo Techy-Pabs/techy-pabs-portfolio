@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Pill from '../Pill.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { quality } = Astro.props.project.data;
+---
+
+<section id="quality" class="bg-black pt-24 md:pt-28">
+  <div class="container-site">
+    <Pill as="h2">Quality</Pill>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        quality.map((item) => (
+          <li class="rounded-card-lg border border-line bg-charcoal p-7">
+            <p class="text-[56px] leading-none font-bold tracking-heading text-amber">{item.value}</p>
+            <p class="mt-5 leading-snug text-text-muted">{item.label}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

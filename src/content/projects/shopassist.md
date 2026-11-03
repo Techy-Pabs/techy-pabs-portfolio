@@ -1,5 +1,6 @@
 ---
 title: ShopAssist
+titleHighlight: Assist
 slug: shopassist
 summary: An AI support assistant that answers store customers from the store's own documents, and tells the owner exactly what it couldn't answer.
 kind: AI customer support
@@ -18,6 +19,9 @@ links:
 cover:
   src: ../../assets/projects/shopassist/chat.webp
   alt: The Loom & Lane demo store with the ShopAssist chat open, answering a customer's question about the price of the Gold stitch black kaftan.
+coverMobile:
+  src: ../../assets/projects/shopassist/chat-panel.webp
+  alt: The ShopAssist chat panel on the Loom & Lane store, where the assistant tells a shopper that the Gold stitch black kaftan costs ₦54,000.
 terminal:
   method: POST
   path: /conversations/42/messages
@@ -27,7 +31,7 @@ terminal:
 
 problem:
   headline: Small online stores answer the same questions all day. Generic chatbots answer fast but invent things, like products that don't exist or discounts nobody approved.
-  highlight: invent things
+  highlight: invent things,
   body: ShopAssist only answers from documents the owner controls, shows where each answer came from, and turns every question it can't answer into a task for the owner.
 
 partsTitle: What the customer, the owner and the server each see.

@@ -1,0 +1,111 @@
+---
+import { getImage, Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Button from '../Button.astro';
+import Pill from '../Pill.astro';
+import { splitAround } from '../../lib/text';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { title, titleHighlight, kind, summary, role, timeline, stack, links, cover, coverMobile } =
+  Astro.props.project.data;
+
+// With a mobile cover, <picture> lets the browser pick one image by screen width,
+// so phones only download the mobile image and wider screens only the cover.
+const coverSizes = '(min-width: 1288px) 1144px, 92vw';
+const art = coverMobile && {
+  wide: await getImage({ src: cover.src, widths: [800, 1144, 1900], sizes: coverSizes }),
+  narrow: await getImage({ src: coverMobile.src, widths: [320, 640], sizes: '280px' }),
+};
+const titleParts = splitAround(title, titleHighlight);
+
+const facts = [
+  { label: 'Role', value: role },
+  { label: 'Timeline', value: timeline },
+  { label: 'Core stack', value: stack.slice(0, 3).join(', ') },
+];
+---
+
+<section class="overflow-x-clip bg-hero pt-32 md:pt-40">
+  <div class="container-site">
+    <Pill>Case study · {kind}</Pill>
+    <h1 class="mt-6 text-[clamp(3.5rem,10vw,8.5rem)] leading-[0.95]">
+      {titleParts.before}<span class="text-amber">{titleParts.match}</span>{titleParts.after}
+    </h1>
+    <p class="mt-6 max-w-3xl text-[clamp(1.25rem,2vw,1.5rem)] leading-snug text-text-soft">{summary}</p>
+
+    <div
+      class="mt-12 grid gap-x-8 gap-y-6 border-y border-line py-6 sm:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,1fr))_auto] lg:items-center"
+    >
+      <dl class="contents">
+        {
+          facts.map((fact) => (
+            <div>
+              <dt class="font-mono text-[13px] tracking-widest text-text-muted uppercase">{fact.label}</dt>
+              <dd class="mt-2 text-[17px]">{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="flex flex-wrap gap-2.5">
+        {
+          links.live && (
+            <Button href={links.live} external>
+              Live demo
+            </Button>
+          )
+        }
+        {
+          links.code && (
+            <Button href={links.code} variant="outline" external>
+              Code
+            </Button>
+          )
+        }
+      </div>
+    </div>
+
+    <!-- The amber panel runs into the next section, so only its top corners are rounded. -->
+    <div class="mt-14 rounded-t-card-lg bg-amber px-[4%] pt-[4%]">
+      {
+        art ? (
+          <picture>
+            {/* 47.5rem = 760 px, the md: breakpoint */}
+            <source
+              media="(min-width: 47.5rem)"
+              srcset={art.wide.srcSet.attribute}
+              sizes={coverSizes}
+              width={art.wide.attributes.width}
+              height={art.wide.attributes.height}
+            />
+            {/* A <picture> has one alt text; the cover's describes both screenshots. */}
+            <img
+              src={art.narrow.src}
+              srcset={art.narrow.srcSet.attribute}
+              sizes="280px"
+              width={art.narrow.attributes.width}
+              height={art.narrow.attributes.height}
+              alt={cover.alt}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="mx-auto block h-auto w-full max-w-[280px] rounded-t-xl md:max-w-none"
+            />
+          </picture>
+        ) : (
+          <Image
+            src={cover.src}
+            alt={cover.alt}
+            widths={[640, 1144, 1900]}
+            sizes={coverSizes}
+            loading="eager"
+            fetchpriority="high"
+            class="block h-auto w-full rounded-t-xl"
+          />
+        )
+      }
+    </div>
+  </div>
+</section>

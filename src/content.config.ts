@@ -22,6 +22,7 @@ const projects = defineCollection({
     return z
       .strictObject({
         title: z.string(),
+        titleHighlight: z.string().optional(), // part of the title shown in amber on the case study
         slug: kebabCase, // becomes the URL: /work/<slug>
         summary: z.string(),
         kind: z.string(), // e.g. "AI customer support"
@@ -40,6 +41,8 @@ const projects = defineCollection({
           docs: z.url().optional(),
         }),
         cover: picture,
+        // Optional cover for screens under 760 px (e.g. a tall phone-sized screenshot).
+        coverMobile: picture.optional(),
         // Optional terminal card for the home hero, shown when this is the latest ship.
         terminal: z
           .strictObject({
@@ -87,6 +90,10 @@ const projects = defineCollection({
       .refine((p) => p.problem.headline.includes(p.problem.highlight), {
         message: 'problem.highlight must be words copied exactly from problem.headline',
         path: ['problem', 'highlight'],
+      })
+      .refine((p) => p.titleHighlight === undefined || p.title.includes(p.titleHighlight), {
+        message: 'titleHighlight must be copied exactly from title',
+        path: ['titleHighlight'],
       });
   },
 });
