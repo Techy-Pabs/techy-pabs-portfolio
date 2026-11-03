@@ -1,0 +1,32 @@
+---
+import { site } from '../site';
+
+// Links with no URL yet (LinkedIn, Upwork) are skipped until they are added to site.ts.
+const links = [
+  { label: 'GitHub', href: site.github },
+  { label: 'LinkedIn', href: site.linkedin },
+  { label: 'Upwork', href: site.upwork },
+].filter((link) => link.href);
+
+const year = new Date().getFullYear();
+---
+
+<footer class="container-site flex flex-col gap-2 py-8 text-[15px] md:flex-row md:items-center md:justify-between">
+  <p class="text-text-muted">© {year} {site.name} · {site.owner}</p>
+  <ul class="flex gap-5">
+    {
+      links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            rel="me noopener"
+            target="_blank"
+            class="flex min-h-11 items-center text-text-soft underline underline-offset-4 transition-colors hover:text-amber"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>

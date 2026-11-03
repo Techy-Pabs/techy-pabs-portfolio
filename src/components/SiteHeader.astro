@@ -1,0 +1,140 @@
+---
+import Logo from './Logo.astro';
+import { navLinks } from '../site';
+
+// "/work/shopassist/" -> "/work/shopassist", so Work stays highlighted on case studies.
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+
+<header class="absolute inset-x-0 top-0 z-30">
+  <div class="container-site flex items-center justify-between gap-6 py-6 md:grid md:grid-cols-[1fr_auto_1fr]">
+    <Logo />
+
+    <!-- Desktop: links in an outlined pill, centred on the page. -->
+    <nav aria-label="Main" class="hidden md:block">
+      <ul class="flex items-center gap-1 rounded-full border border-line p-1">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={isCurrent(link.href) ? 'page' : undefined}
+                class:list={[
+                  'flex min-h-11 items-center rounded-full px-4 text-[15px] transition-colors lg:px-5',
+                  isCurrent(link.href) ? 'bg-amber font-semibold text-black' : 'text-text-soft hover:text-white',
+                ]}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      href="/contact"
+      class="hidden min-h-11 items-center justify-self-end rounded-full border border-amber px-5 font-button text-[15px] font-medium tracking-label text-amber transition-colors hover:bg-amber hover:text-black md:inline-flex"
+    >
+      Start a project
+    </a>
+
+    <!-- Phone: round menu button that opens the full screen menu below. -->
+    <button
+      type="button"
+      class="grid size-12 place-items-center rounded-full border border-amber text-amber md:hidden"
+      aria-label="Open menu"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="site-menu"
+      data-menu-open
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M3 6h14M3 10h14M9 14h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!--
+    <dialog> is the browser's built-in modal. showModal() traps keyboard focus inside it,
+    makes the page behind it unclickable and closes it on Escape, so we write very little JS.
+  -->
+  <dialog
+    id="site-menu"
+    aria-label="Menu"
+    class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-hero p-0 text-white open:flex backdrop:bg-black"
+  >
+    <div class="container-site flex flex-1 flex-col py-6">
+      <div class="flex items-center justify-between">
+        <Logo />
+        <button
+          type="button"
+          class="grid size-12 place-items-center rounded-full border border-amber text-amber"
+          aria-label="Close menu"
+          autofocus
+          data-menu-close
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+
+      <nav aria-label="Menu" class="mt-12">
+        <ul>
+          {
+            navLinks.map((link) => (
+              <li class="border-b border-line">
+                <a
+                  href={link.href}
+                  aria-current={isCurrent(link.href) ? 'page' : undefined}
+                  class:list={[
+                    'flex min-h-11 items-center py-4 text-4xl font-bold tracking-heading',
+                    isCurrent(link.href) ? 'text-amber' : 'text-white',
+                  ]}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <a
+        href="/contact"
+        class="mt-auto flex min-h-12 items-center justify-center rounded-full bg-button-primary font-button text-base font-medium tracking-label text-black"
+      >
+        Start a project →
+      </a>
+    </div>
+  </dialog>
+</header>
+
+<script>
+  const menu = document.querySelector<HTMLDialogElement>('#site-menu');
+  const openButton = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeButton = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+
+  if (menu && openButton && closeButton) {
+    openButton.addEventListener('click', () => {
+      menu.showModal();
+      openButton.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden'; // stop the page scrolling behind the menu
+    });
+
+    closeButton.addEventListener('click', () => menu.close());
+
+    // Runs however the menu closes: close button, Escape key, or the code below.
+    menu.addEventListener('close', () => {
+      openButton.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+    });
+
+    // If the window is widened past 760 px while the menu is open, close it.
+    window.matchMedia('(min-width: 760px)').addEventListener('change', (event) => {
+      if (event.matches && menu.open) menu.close();
+    });
+  }
+</script>

@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/*
+  Design tokens from design/SPEC.md.
+  Every variable here becomes Tailwind classes, e.g. --color-amber gives
+  bg-amber, text-amber and border-amber; --font-mono gives font-mono.
+*/
+@theme {
+  /* Drop Tailwind's built-in palette so only the brand colours exist. */
+  --color-*: initial;
+
+  --color-black: #000000;
+  --color-charcoal: #1c1d20;
+  --color-amber: #ffbb18;
+  --color-light: #f4f4f4;
+  --color-white: #ffffff;
+  --color-text-soft: #d1d1d1;
+  --color-text-muted: #a8a49e;
+  --color-text-muted-light: #494c4f;
+  --color-line: rgb(249 249 249 / 0.16);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* Fonts (loaded from Fontsource in BaseLayout.astro). */
+  --font-sans: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-pill: "Ropa Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-button: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --tracking-heading: -0.04em;
+  --tracking-label: 0.5px;
+
+  --radius-card: 1.5rem;
+  --radius-card-lg: 2.25rem;
+
+  /* md: now means "760 px and wider", the spec's phone/desktop switch. */
+  --breakpoint-md: 47.5rem;
+}
+
+/* Page-width wrapper: 1240 px of content plus 24 px padding each side. */
+@utility container-site {
+  width: 100%;
+  max-width: calc(1240px + 48px);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+@utility bg-hero {
+  background-image: linear-gradient(277deg, #1c1d20 0%, #000000 100%);
+}
+
+@utility bg-button-primary {
+  background-image: linear-gradient(217deg, #ffbb18 69%, #f4f4f4 100%);
+}
+
+@layer base {
+  html {
+    @apply bg-black font-sans text-white antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-bold tracking-heading;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-amber;
+  }
+
+  /* Turn every animation and transition off when the visitor asks for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<!-- Placeholder home page for Slice 1. The real sections come in a later slice. -->
+<BaseLayout
+  title="Techy Pabs"
+  description="Abraham Bassey is an AI backend engineer building APIs, databases and AI pipelines for real products."
+>
+  <section class="bg-hero pt-36 pb-24 md:pt-44">
+    <div class="container-site">
+      <p
+        class="inline-flex items-center rounded-full border border-amber px-4 py-1.5 font-pill text-[15px] tracking-label text-white"
+      >
+        Available for new projects
+      </p>
+      <h1 class="mt-8 max-w-[15ch] text-5xl leading-[1.05] md:text-7xl">
+        AI backend engineer for products that need to <span class="text-amber">actually work.</span>
+      </h1>
+      <p class="mt-6 max-w-xl text-lg text-text-muted">
+        Site under construction. This page checks the layout, fonts and colour tokens.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="/contact"
+          class="inline-flex min-h-12 items-center rounded-full bg-button-primary px-6 font-button font-medium tracking-label text-black"
+        >
+          Start a project →
+        </a>
+        <code class="inline-flex min-h-12 items-center rounded-card bg-charcoal px-5 font-mono text-sm text-text-soft">
+          POST /conversations/42/messages
+        </code>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
