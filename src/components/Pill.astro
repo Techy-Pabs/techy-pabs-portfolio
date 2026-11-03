@@ -1,0 +1,19 @@
+---
+// The small rounded label above section headings ("What I build", "About", ...).
+interface Props {
+  tone?: 'dark' | 'light'; // the background the pill sits on
+  class?: string;
+}
+
+const { tone = 'dark', class: className } = Astro.props;
+---
+
+<p
+  class:list={[
+    'inline-flex items-center gap-2 rounded-full border px-3.5 py-1 font-pill text-[15px] tracking-label',
+    tone === 'dark' ? 'border-amber text-white' : 'border-black text-black',
+    className,
+  ]}
+>
+  <slot />
+</p>

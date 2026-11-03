@@ -23,6 +23,9 @@ pnpm-debug.log*
 !.vscode/extensions.json
 !.vscode/launch.json
 
+# local review screenshots
+review-shots/
+
 # Claude Code personal settings
 .claude/settings.local.json
 

@@ -30,6 +30,7 @@ const provenBy = await getCollection('services', (service) => service.data.proof
       <dl class="mt-6 grid gap-x-6 gap-y-1 sm:grid-cols-[max-content_1fr]">
         <dt class="text-text-muted">Slug</dt><dd>{project.id}</dd>
         <dt class="text-text-muted">Featured / order</dt><dd>{String(p.featured)} / {p.order}</dd>
+        <dt class="text-text-muted">Shipped</dt><dd>{p.shipped.toISOString().slice(0, 10)}</dd>
         <dt class="text-text-muted">Role</dt><dd>{p.role}</dd>
         <dt class="text-text-muted">Timeline</dt><dd>{p.timeline}</dd>
         <dt class="text-text-muted">Core stack</dt><dd>{p.stack.slice(0, 3).join(', ')}</dd>

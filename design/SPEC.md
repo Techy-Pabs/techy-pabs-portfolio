@@ -46,7 +46,7 @@ Layout: content max width 1240 px with 24 px side padding. Cards 24 to 36 px rad
 
 All pages share the nav (logo "tp" tile plus "Techy Pabs"; links Work, Services, About, Contact, with the current page highlighted in amber; "Start a project" outline button) and the footer (copyright, GitHub, LinkedIn, Upwork).
 
-1. **Home** (`/`): hero with headline "AI backend engineer for products that need to actually work.", the cutout portrait rising above an amber block, a typing terminal card and a "Latest ship" tag; a light scrolling capabilities strip; "What I build" services from the services collection; "Selected work" showing featured projects; a short About teaser with the second portrait; an amber contact block with Upwork, WhatsApp and email.
+1. **Home** (`/`): hero with headline "AI backend engineer for products that need to actually work.", the cutout portrait rising above an amber block, a typing terminal card and a "Latest ship" tag (both from the most recently shipped project); a light scrolling capabilities strip with a pause/play button; "What I build" services from the services collection; "Selected work" showing featured projects; a short About teaser with the second portrait; an amber contact block with Upwork, WhatsApp and email.
 2. **Work** (`/work`): "All work." with automatic counts (shipped, live demos); filter buttons All, AI, Backend, Client work (from project tags) with an honest empty state; one large row per project linking to its case study.
 3. **Case study** (`/work/[slug]`): one template for every project. Title, summary, role, timeline, core stack, Live demo and Code buttons; hero screenshot on an amber panel; The problem; Three parts, one system (or however many parts the project has); Under the hood with a step diagram and key decisions; Quality numbers; Results and next steps; closing call to action; "All work" and GitHub links.
 4. **Services** (`/services`): one block per service from the services collection, each with "Good for", "What you get" and a link to the project that proves it; a four step process; the tech stack; an FAQ; a call to action.
@@ -57,6 +57,8 @@ All pages share the nav (logo "tp" tile plus "Techy Pabs"; links Work, Services,
 ## Content model
 
 Projects (`src/content/projects/*.md`): title, slug, summary, kind, year, tags (ai, backend, client), featured, order, role, timeline, stack (the first three are the core stack), links (live, code, docs), cover image, parts (label, title, body, image, optional link with label and href), partsTitle (the heading above the parts), problem (headline, highlight, body; highlight must be words copied exactly from the headline), diagram (title, steps with label, text and an optional highlight flag), decisions (title, body), quality (value, label), results, nextSteps. The Markdown body is optional extra write up.
+
+Two more project fields: `shipped` is the required ship date, written unquoted as YYYY-MM-DD, and is used for any "newest first" ordering, including choosing the project for the home page's "Latest ship" tag. `terminal` is optional and holds the home hero's terminal card for that project: method, path, question, trace and response (for example POST, /conversations/42/messages, "Is delivery within Lagos free?", "3 sources found · pgvector", "200 OK · cites delivery.md").
 
 Every image (the cover and each part's image) is written as `{ src, alt }`: `src` is a path into `src/assets/` and `alt` is required, non-empty alt text.
 
@@ -70,7 +72,7 @@ The first project entry is ShopAssist: timeline 3 weeks, October to November 202
 
 ## Motion
 
-- Home: headline words rise in on load; the terminal card types its lines in order; the capabilities strip scrolls slowly and pauses on hover; service cards lift on hover; the featured project's screens fan apart as it scrolls into view.
+- Home: headline words rise in on load; the terminal card types its lines in order; the capabilities strip scrolls slowly, pauses on hover, and has a pause/play button (keyboard focusable, at least 44 px, labelled "Pause scrolling" / "Play scrolling", not shown under reduced motion) so keyboard and touch users can stop it; service cards lift on hover; the featured project's screens fan apart as it scrolls into view.
 - Clicking a project carries its image into the case study page (Astro view transitions).
 - Case study: the parts reveal in turn; the diagram draws step by step as it scrolls into view; quality numbers count up once.
 

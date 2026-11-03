@@ -1,0 +1,32 @@
+---
+import Button from '../Button.astro';
+import { contactChannels } from '../../site';
+---
+
+<!-- Bottom padding plus the footer's own padding gives about 48 px to the footer text at 1440 px, 40 px on phones. -->
+<section class="bg-black pt-24 pb-2 md:pt-28 md:pb-1">
+  <div class="container-site">
+    <div
+      class="grid gap-10 rounded-card-lg bg-button-primary p-12 text-black max-sm:py-16 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-center"
+    >
+      <h2 class="max-w-2xl text-[clamp(2.5rem,4.6vw,4rem)] leading-[1.02]">Have a backend or AI feature to build?</h2>
+      <ul class="flex flex-col gap-2.5">
+        {
+          contactChannels.map((channel, i) => (
+            <li>
+              <Button
+                href={channel.href}
+                external={channel.external}
+                variant={i === 0 ? 'black' : 'outline-dark'}
+                wide
+                arrow
+              >
+                {channel.label}
+              </Button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

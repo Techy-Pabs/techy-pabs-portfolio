@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Pill from '../Pill.astro';
+import ServiceCard from './ServiceCard.astro';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="bg-charcoal py-24 md:py-28">
+  <div class="container-site">
+    <div class="mx-auto max-w-2xl text-center">
+      <Pill>What I build</Pill>
+      <h2 class="mt-5 text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05]">
+        The engine room of your <span class="text-amber">product.</span>
+      </h2>
+      <p class="mx-auto mt-5 max-w-md text-text-muted">
+        Every service links to a shipped project that proves it. No claims without code.
+      </p>
+    </div>
+
+    <ul class="mt-14 grid gap-4 lg:grid-cols-3">
+      {services.map((service, i) => <ServiceCard service={service} number={i + 1} />)}
+    </ul>
+  </div>
+</section>

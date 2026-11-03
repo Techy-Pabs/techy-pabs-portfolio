@@ -26,6 +26,8 @@ const projects = defineCollection({
         summary: z.string(),
         kind: z.string(), // e.g. "AI customer support"
         year: z.number().int().min(2000),
+        // Ship date, written unquoted as YYYY-MM-DD; YAML reads that as a date. Used for "newest first".
+        shipped: z.date(),
         tags: z.array(z.enum(['ai', 'backend', 'client'])).min(1),
         featured: z.boolean().default(false),
         order: z.number().int(), // lower numbers are listed first
@@ -38,6 +40,16 @@ const projects = defineCollection({
           docs: z.url().optional(),
         }),
         cover: picture,
+        // Optional terminal card for the home hero, shown when this is the latest ship.
+        terminal: z
+          .strictObject({
+            method: z.string(), // e.g. "POST"
+            path: z.string(),
+            question: z.string(),
+            trace: z.string(),
+            response: z.string(),
+          })
+          .optional(),
         parts: z
           .array(
             z.strictObject({

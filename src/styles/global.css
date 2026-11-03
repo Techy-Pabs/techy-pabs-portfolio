@@ -35,6 +35,36 @@
 
   /* md: now means "760 px and wider", the spec's phone/desktop switch. */
   --breakpoint-md: 47.5rem;
+
+  /*
+    Animations. Components only use them through Tailwind's motion-safe: variant
+    (e.g. motion-safe:animate-rise), so they never run when the device asks for reduced motion.
+  */
+  --animate-rise: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-type: type 0.8s steps(32, end) both;
+  --animate-marquee: marquee 45s linear infinite;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.35em);
+    }
+  }
+  /* Reveals a line left to right in small steps, like typing. */
+  @keyframes type {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  /* The strip holds two identical lists, so moving by half its width loops seamlessly. */
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 /* Page-width wrapper: 1240 px of content plus 24 px padding each side. */

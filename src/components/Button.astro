@@ -1,0 +1,38 @@
+---
+// A link styled as one of the site's rounded buttons.
+import type { HTMLAttributes } from 'astro/types';
+import ArrowIcon from './ArrowIcon.astro';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  variant?: 'primary' | 'outline' | 'amber' | 'dark' | 'black' | 'outline-dark';
+  arrow?: boolean;
+  external?: boolean; // opens in a new tab
+  wide?: boolean; // full width, with the arrow pushed to the right edge
+}
+
+const { variant = 'primary', arrow = false, external = false, wide = false, class: className, ...rest } = Astro.props;
+
+const variants = {
+  primary: 'bg-button-primary text-black',
+  outline: 'border border-text-soft/40 text-white hover:border-white',
+  amber: 'bg-amber text-black hover:bg-light',
+  dark: 'bg-charcoal text-white hover:bg-black',
+  black: 'bg-black text-white hover:text-amber',
+  'outline-dark': 'border border-black text-black hover:bg-black hover:text-amber',
+};
+---
+
+<a
+  {...rest}
+  {...external && { target: '_blank', rel: 'noopener' }}
+  class:list={[
+    'inline-flex min-h-12 items-center gap-2.5 rounded-full px-6 font-button text-[15px] font-medium tracking-label transition-colors',
+    wide && 'w-full justify-between',
+    variants[variant],
+    className,
+  ]}
+>
+  <slot />
+  {arrow && <ArrowIcon />}
+</a>

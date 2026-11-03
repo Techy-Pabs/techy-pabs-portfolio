@@ -4,6 +4,7 @@ slug: shopassist
 summary: An AI support assistant that answers store customers from the store's own documents, and tells the owner exactly what it couldn't answer.
 kind: AI customer support
 year: 2026
+shipped: 2026-11-02
 tags: [ai, backend]
 featured: true
 order: 1
@@ -17,6 +18,12 @@ links:
 cover:
   src: ../../assets/projects/shopassist/chat.webp
   alt: The Loom & Lane demo store with the ShopAssist chat open, answering a customer's question about the price of the Gold stitch black kaftan.
+terminal:
+  method: POST
+  path: /conversations/42/messages
+  question: Is delivery within Lagos free?
+  trace: 3 sources found · pgvector
+  response: 200 OK · cites delivery.md
 
 problem:
   headline: Small online stores answer the same questions all day. Generic chatbots answer fast but invent things, like products that don't exist or discounts nobody approved.

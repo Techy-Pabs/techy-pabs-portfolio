@@ -1,0 +1,60 @@
+---
+import { capabilities } from '../../site';
+
+// The list is drawn twice so the scroll can loop. The second copy is hidden from screen readers.
+const copies = [false, true];
+---
+
+<section aria-label="Capabilities" class="group relative overflow-hidden bg-light py-5 text-charcoal md:py-6" data-strip>
+  <div
+    class="flex w-max motion-safe:animate-marquee group-data-paused:[animation-play-state:paused] hover:[animation-play-state:paused]"
+  >
+    {
+      copies.map((isDuplicate) => (
+        <ul
+          class="flex min-w-screen shrink-0 items-center justify-around gap-12 pr-12"
+          aria-hidden={isDuplicate ? 'true' : undefined}
+        >
+          {capabilities.map((item) => (
+            <li class="flex items-center gap-12 text-[26px] font-bold tracking-heading whitespace-nowrap md:text-[28px]">
+              <span class="size-5 rounded-full bg-amber" aria-hidden="true" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+
+  <!-- Lets keyboard and touch users stop the motion. It sits on a fade so the words vanish before reaching it.
+       Not shown when the device asks for reduced motion, because the strip does not move then. -->
+  <div
+    class="absolute inset-y-0 right-0 flex items-center bg-linear-to-l from-light from-60% to-transparent pr-3 pl-12 motion-reduce:hidden md:pr-6"
+  >
+    <button
+      type="button"
+      class="grid size-11 place-items-center rounded-full border border-charcoal bg-light text-charcoal transition-colors hover:bg-charcoal hover:text-light"
+      aria-label="Pause scrolling"
+      data-strip-toggle
+    >
+      <svg class="group-data-paused:hidden" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M5 3v10M11 3v10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+      </svg>
+      <svg class="hidden group-data-paused:block" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M5 3.5v9l7.5-4.5z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"
+        ></path>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  // Pausing sets data-paused on the strip; the CSS above stops the animation and swaps the icon.
+  for (const strip of document.querySelectorAll<HTMLElement>('[data-strip]')) {
+    const button = strip.querySelector<HTMLButtonElement>('[data-strip-toggle]');
+    button?.addEventListener('click', () => {
+      const paused = strip.toggleAttribute('data-paused');
+      button.setAttribute('aria-label', paused ? 'Play scrolling' : 'Pause scrolling');
+    });
+  }
+</script>

@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Button from '../Button.astro';
+import Pill from '../Pill.astro';
+import ProjectCard from './ProjectCard.astro';
+
+const featured = (await getCollection('projects', (project) => project.data.featured)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+{
+  featured.length > 0 && (
+    <section class="bg-black py-24 md:py-28">
+      <div class="container-site">
+        <div class="flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <Pill>Selected work</Pill>
+            <h2 class="mt-5 text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05]">
+              Shipped, live, <span class="text-amber">documented.</span>
+            </h2>
+          </div>
+          <Button href="/work" variant="amber" arrow>
+            All projects
+          </Button>
+        </div>
+
+        <ul class="mt-10 space-y-8">
+          {featured.map((project) => (
+            <li>
+              <ProjectCard project={project} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

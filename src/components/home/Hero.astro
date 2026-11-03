@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content';
+import ArrowIcon from '../ArrowIcon.astro';
+import Button from '../Button.astro';
+import Pill from '../Pill.astro';
+import PortraitFrame from '../PortraitFrame.astro';
+import { heroStack, portraits } from '../../site';
+
+// The most recently shipped project.
+const [latest] = (await getCollection('projects')).sort((a, b) => b.data.shipped.getTime() - a.data.shipped.getTime());
+
+// Each word is its own span so the words can rise in one after another.
+const headline = [
+  ...'AI backend engineer for products that need to'.split(' ').map((word) => ({ word, amber: false })),
+  ...'actually work.'.split(' ').map((word) => ({ word, amber: true })),
+];
+const wordDelay = 70; // ms between words
+const terminalStart = headline.length * wordDelay + 400; // terminal starts once the headline lands
+---
+
+<section class="overflow-x-clip bg-hero pt-32 md:pt-36">
+  <div class="container-site grid items-end gap-x-10 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,396px)]">
+    <div class="lg:pb-24">
+      <Pill>
+        <span class="size-2 rounded-full bg-amber/50" aria-hidden="true"></span>
+        Available for new projects
+      </Pill>
+
+      <!-- max-w keeps the mockup's line breaks: "AI backend / engineer for / products that need / to actually work." -->
+      <h1 class="mt-8 max-w-[8.4em] text-[clamp(2.75rem,6.4vw,5.75rem)] leading-[0.98]">
+        {
+          headline.map(({ word, amber }, i) => (
+            <>
+              <span
+                class:list={['inline-block motion-safe:animate-rise', amber && 'text-amber']}
+                style={`animation-delay: ${i * wordDelay}ms`}
+              >
+                {word}
+              </span>{' '}
+            </>
+          ))
+        }
+      </h1>
+
+      <p class="mt-7 max-w-xl text-lg leading-relaxed text-text-muted">
+        I design and build the APIs, databases and AI pipelines behind real products. Python and FastAPI, retrieval and
+        LLM integration, tested and deployed.
+      </p>
+
+      <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row">
+        <Button href="/contact" arrow>Start a project</Button>
+        <Button href="/work" variant="outline">See my work</Button>
+      </div>
+
+      <ul class="mt-12 flex flex-wrap gap-x-7 gap-y-4 font-mono text-[13px] tracking-wide text-text-muted uppercase">
+        {heroStack.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    <PortraitFrame
+      image={portraits.hero}
+      frameClass="bg-amber"
+      frameTop="32%"
+      sizes="(min-width: 1024px) 396px, (min-width: 760px) 396px, calc(100vw - 72px)"
+      eager
+      class="ml-auto w-[calc(100%-24px)] max-w-[396px] md:mx-auto lg:mr-0"
+    >
+      {
+        latest?.data.terminal && (
+          // Starts just below the chin so it never covers the face.
+          <div
+            class="absolute top-[63.5%] -left-[6%] w-[92%] rounded-2xl border border-line bg-black/90 px-5 py-3.5 font-mono text-[12px] leading-[1.65] shadow-2xl shadow-black/60 backdrop-blur md:w-[85%] md:text-[13px]"
+            aria-label={`Example API call from ${latest.data.title}`}
+            role="group"
+          >
+            <div class="mb-2 flex gap-1.5" aria-hidden="true">
+              <span class="size-2 rounded-full bg-text-muted/50" />
+              <span class="size-2 rounded-full bg-text-muted/50" />
+              <span class="size-2 rounded-full bg-amber" />
+            </div>
+            {[
+              <>
+                <span class="text-amber">{latest.data.terminal.method}</span> {latest.data.terminal.path}
+              </>,
+              <>"{latest.data.terminal.question}"</>,
+              <span class="inline-flex items-center gap-1.5 text-text-muted">
+                <ArrowIcon /> {latest.data.terminal.trace}
+              </span>,
+              <span class="text-amber">{latest.data.terminal.response}</span>,
+            ].map((line, i) => (
+              <p
+                class="w-fit max-w-full whitespace-nowrap text-white motion-safe:animate-type"
+                style={`animation-delay: ${terminalStart + i * 700}ms`}
+              >
+                {line}
+              </p>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        latest && (
+          // Sits to the right of the head; hidden on phones, where there is no room beside the face.
+          <a
+            href={`/work/${latest.id}`}
+            class="absolute top-[-1%] -right-[6%] hidden rounded-xl border border-line bg-charcoal/85 px-4 py-2.5 shadow-xl shadow-black/50 backdrop-blur transition-colors hover:border-amber md:block"
+          >
+            <span class="block font-mono text-[10px] tracking-widest text-text-muted uppercase">Latest ship</span>
+            <span class="block text-[15px] font-semibold text-white">
+              {latest.data.title}
+              {latest.data.links.live && ', live'}
+            </span>
+          </a>
+        )
+      }
+    </PortraitFrame>
+  </div>
+</section>
