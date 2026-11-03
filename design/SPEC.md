@@ -2,7 +2,7 @@
 
 The personal portfolio of Abraham Bassey, an AI backend engineer, under the brand Techy Pabs. It shows every project he ships, now and in future, and turns visitors into client enquiries.
 
-The approved mockups are in `design/mockups/` (desktop at 1440 px wide and phone at 390 px wide for each page). Build to match them. Images are in `design/images/`.
+The approved mockups are in `design/mockups/` (desktop at 1440 px wide and phone at 390 px wide for each page). Build to match them. Images are in `src/assets/` (`portraits/` and `projects/<slug>/`), so Astro can optimise them.
 
 ## Stack
 
@@ -56,9 +56,13 @@ All pages share the nav (logo "tp" tile plus "Techy Pabs"; links Work, Services,
 
 ## Content model
 
-Projects (`src/content/projects/*.md`): title, slug, summary, kind, year, tags (ai, backend, client), featured, order, role, timeline, stack, links (live, code, docs), cover image, parts (label, title, body, image), problem, diagram steps, decisions (title, body), quality (value, label), results, next steps. The Markdown body is optional extra write up.
+Projects (`src/content/projects/*.md`): title, slug, summary, kind, year, tags (ai, backend, client), featured, order, role, timeline, stack (the first three are the core stack), links (live, code, docs), cover image, parts (label, title, body, image, optional link with label and href), partsTitle (the heading above the parts), problem (headline, highlight, body; highlight must be words copied exactly from the headline), diagram (title, steps with label, text and an optional highlight flag), decisions (title, body), quality (value, label), results, nextSteps. The Markdown body is optional extra write up.
 
-Services (`src/content/services/*.md`): title, order, summary, good for, deliverables, proof (project slug, section anchor, link label). A service is published only once a shipped project proves it.
+Every image (the cover and each part's image) is written as `{ src, alt }`: `src` is a path into `src/assets/` and `alt` is required, non-empty alt text.
+
+Services (`src/content/services/*.md`): title, order, summary (short card text), goodFor, deliverables, proof (project, section, label). The Markdown body is the longer description on the Services page. `proof.project` must be the slug of an existing project, and `proof.section` must be one of the case study section anchors: `problem`, `parts`, `under-the-hood`, `quality` or `results`. A service is published only once a shipped project proves it.
+
+The schemas are strict: unknown fields, missing images, bad URLs or a proof that points to a missing project fail the build.
 
 Site settings (`src/site.ts`): name, email basseyabraham988@gmail.com, WhatsApp link https://wa.me/2347084361745, GitHub https://github.com/Techy-Pabs, LinkedIn and Upwork (to be supplied).
 

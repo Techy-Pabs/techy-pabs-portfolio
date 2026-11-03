@@ -1,4 +1,5 @@
 ---
+import ArrowIcon from './ArrowIcon.astro';
 import Logo from './Logo.astro';
 import { navLinks } from '../site';
 
@@ -104,9 +105,9 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
 
       <a
         href="/contact"
-        class="mt-auto flex min-h-12 items-center justify-center rounded-full bg-button-primary font-button text-base font-medium tracking-label text-black"
+        class="mt-auto flex min-h-12 items-center justify-center gap-2 rounded-full bg-button-primary font-button text-base font-medium tracking-label text-black"
       >
-        Start a project →
+        Start a project <ArrowIcon />
       </a>
     </div>
   </dialog>

@@ -1,0 +1,20 @@
+---
+// A small arrow drawn in SVG, so it looks the same whatever font is loaded.
+// It is sized in em (it scales with the text around it) and uses the text colour.
+interface Props {
+  direction?: 'right' | 'left';
+  class?: string;
+}
+
+const { direction = 'right', class: className } = Astro.props;
+---
+
+<svg
+  class:list={['inline-block size-[1em] shrink-0', direction === 'left' && '-scale-x-100', className]}
+  viewBox="0 0 16 16"
+  fill="none"
+  aria-hidden="true"
+>
+  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+  ></path>
+</svg>

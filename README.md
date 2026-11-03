@@ -24,9 +24,12 @@ Stop the dev server with `Ctrl + C`.
 ## Where things live
 
 ```text
-design/                   spec, mockups and source images (not part of the built site)
+design/                   spec and mockups (not part of the built site)
 public/                   files served as-is, e.g. the favicon
 src/
+  assets/                 images Astro optimises: portraits and project screenshots
+  content/                projects and services as Markdown files
+  content.config.ts       the schemas those Markdown files must match
   site.ts                 site name, email and social links, nav links
   styles/global.css       Tailwind import and the design tokens (colours, fonts, breakpoints)
   layouts/BaseLayout.astro  the HTML shell every page uses: fonts, header, footer

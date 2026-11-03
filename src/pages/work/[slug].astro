@@ -1,0 +1,152 @@
+---
+// TEMPORARY (Slice 2): prints every field of one project to prove the data and images work.
+// The designed case study template replaces this in a later slice.
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArrowIcon from '../../components/ArrowIcon.astro';
+
+// Astro builds one page per project at build time; the file name [slug] is filled from params.
+export const getStaticPaths = (async () => {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+const provenBy = await getCollection('services', (service) => service.data.proof.project.id === project.id);
+---
+
+<BaseLayout title={p.title} description={p.summary}>
+  <article class="container-site space-y-12 pt-36 pb-24 [&_h2]:mb-3 [&_h2]:text-2xl">
+    <a href="/work" class="inline-flex items-center gap-1 text-amber underline"><ArrowIcon direction="left" /> All work</a>
+
+    <header>
+      <p class="font-mono text-sm text-text-muted">{p.kind} · {p.year} · tags: {p.tags.join(', ')}</p>
+      <h1 class="text-5xl">{p.title}</h1>
+      <p class="mt-3 max-w-2xl text-text-soft">{p.summary}</p>
+      <dl class="mt-6 grid gap-x-6 gap-y-1 sm:grid-cols-[max-content_1fr]">
+        <dt class="text-text-muted">Slug</dt><dd>{project.id}</dd>
+        <dt class="text-text-muted">Featured / order</dt><dd>{String(p.featured)} / {p.order}</dd>
+        <dt class="text-text-muted">Role</dt><dd>{p.role}</dd>
+        <dt class="text-text-muted">Timeline</dt><dd>{p.timeline}</dd>
+        <dt class="text-text-muted">Core stack</dt><dd>{p.stack.slice(0, 3).join(', ')}</dd>
+        <dt class="text-text-muted">Full stack</dt><dd>{p.stack.join(', ')}</dd>
+        {
+          Object.entries(p.links).map(([name, href]) => (
+            <>
+              <dt class="text-text-muted">Link: {name}</dt>
+              <dd><a class="text-amber underline" href={href}>{href}</a></dd>
+            </>
+          ))
+        }
+      </dl>
+    </header>
+
+    <section>
+      <h2>Cover</h2>
+      <Image src={p.cover.src} alt={p.cover.alt} width={1200} class="h-auto w-full max-w-3xl rounded-card" />
+    </section>
+
+    <section id="problem">
+      <h2>The problem</h2>
+      <p class="text-xl">
+        {p.problem.headline.split(p.problem.highlight)[0]}<mark class="bg-amber px-1 text-black">{p.problem.highlight}</mark>{
+          p.problem.headline.split(p.problem.highlight).slice(1).join(p.problem.highlight)
+        }
+      </p>
+      <p class="mt-3 text-text-muted">{p.problem.body}</p>
+    </section>
+
+    <section id="parts">
+      <h2>{p.partsTitle} ({p.parts.length} parts)</h2>
+      <ol class="grid gap-6 md:grid-cols-3">
+        {
+          p.parts.map((part, i) => (
+            <li class="rounded-card bg-charcoal p-4">
+              <Image src={part.image.src} alt={part.image.alt} width={600} class="h-auto w-full rounded-xl" />
+              <p class="mt-3 font-mono text-sm text-amber">
+                {String(i + 1).padStart(2, '0')} · {part.label}
+              </p>
+              <h3 class="text-lg">{part.title}</h3>
+              <p class="text-text-muted">{part.body}</p>
+              {part.link && (
+                <a class="mt-2 inline-flex items-center gap-1 text-amber underline" href={part.link.href}>
+                  {part.link.label} <ArrowIcon />
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section id="under-the-hood">
+      <h2>Under the hood: {p.diagram.title}</h2>
+      <ol class="list-decimal space-y-1 pl-6 font-mono text-sm">
+        {
+          p.diagram.steps.map((step) => (
+            <li class:list={[step.highlight && 'text-amber']}>
+              {step.label}: {step.text}
+            </li>
+          ))
+        }
+      </ol>
+      <h3 class="mt-6 text-lg">Key decisions</h3>
+      <ul class="list-disc space-y-2 pl-6">
+        {
+          p.decisions.map((d) => (
+            <li>
+              <strong>{d.title}.</strong> <span class="text-text-muted">{d.body}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section id="quality">
+      <h2>Quality</h2>
+      <ul class="flex flex-wrap gap-6">
+        {
+          p.quality.map((q) => (
+            <li>
+              <span class="text-3xl font-bold text-amber">{q.value}</span> <span class="text-text-muted">{q.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section id="results" class="grid gap-6 md:grid-cols-2">
+      <div>
+        <h2>What it delivers</h2>
+        <ul class="list-disc space-y-1 pl-6">{p.results.map((r) => <li>{r}</li>)}</ul>
+      </div>
+      <div>
+        <h2>What I'd build next</h2>
+        <ul class="list-disc space-y-1 pl-6">{p.nextSteps.map((n) => <li>{n}</li>)}</ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Services this project proves ({provenBy.length})</h2>
+      <ul class="list-disc space-y-1 pl-6">
+        {
+          provenBy.map((s) => (
+            <li>
+              {s.data.title} <span class="text-text-muted">(proof section: #{s.data.proof.section})</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section>
+      <h2>Markdown body</h2>
+      <div class="text-text-muted"><Content /></div>
+      <p class="text-sm text-text-muted">(Empty for ShopAssist: the body is optional.)</p>
+    </section>
+  </article>
+</BaseLayout>
