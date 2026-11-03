@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Pill from '../Pill.astro';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+
+// Counts come from the data, so they update as soon as a project file is added.
+const shipped = projects.length;
+const liveDemos = projects.filter((project) => project.data.links.live).length;
+const plural = (n: number, word: string) => `${word}${n === 1 ? '' : 's'}`;
+
+const stats = [
+  { value: shipped, label: `${plural(shipped, 'project')} shipped` },
+  { value: liveDemos, label: plural(liveDemos, 'live demo') },
+];
+---
+
+<section class="bg-hero pt-32 pb-16 md:pt-40 md:pb-20">
+  <div class="container-site grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+    <div>
+      <Pill>Portfolio</Pill>
+      <h1 class="mt-6 text-[clamp(3.5rem,9vw,7.5rem)] leading-[0.95]">All <span class="text-amber">work.</span></h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-text-muted">
+        Every project I've shipped, each with a case study: the problem, how it works under the hood, and how it was
+        tested and deployed.
+      </p>
+    </div>
+
+    <dl class="flex gap-10">
+      {
+        stats.map((stat) => (
+          <div class="flex flex-col-reverse">
+            <dt class="mt-2 text-text-muted">{stat.label}</dt>
+            <dd class="text-[56px] leading-none font-bold tracking-heading text-amber">{stat.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

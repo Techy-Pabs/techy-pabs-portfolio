@@ -4,10 +4,11 @@ import ArrowIcon from '../ArrowIcon.astro';
 import Button from '../Button.astro';
 import Pill from '../Pill.astro';
 import PortraitFrame from '../PortraitFrame.astro';
+import { newestFirst } from '../../lib/projects';
 import { heroStack, portraits } from '../../site';
 
 // The most recently shipped project.
-const [latest] = (await getCollection('projects')).sort((a, b) => b.data.shipped.getTime() - a.data.shipped.getTime());
+const [latest] = (await getCollection('projects')).sort(newestFirst);
 
 // Each word is its own span so the words can rise in one after another.
 const headline = [

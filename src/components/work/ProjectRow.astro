@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import ArrowIcon from '../ArrowIcon.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  number: number;
+}
+
+const { project, number } = Astro.props;
+const { title, summary, kind, year, stack, tags, cover } = project.data;
+---
+
+<!-- data-tags is what the filter buttons match against. -->
+<li data-tags={tags.join(' ')} class="group relative border-t border-line py-10 md:py-12">
+  <article
+    class="grid gap-6 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:gap-8 lg:grid-cols-[40px_minmax(0,460px)_minmax(0,1fr)_56px] lg:items-center"
+  >
+    <!-- Below 1024 px the number and arrow share the top line; on wider screens they become the outer columns. -->
+    <div class="flex items-center justify-between md:col-span-2 lg:contents">
+      <p class="font-mono text-sm text-text-muted lg:order-first lg:self-start lg:pt-2">{String(number).padStart(2, '0')}</p>
+      <span
+        class="grid size-14 place-items-center rounded-full bg-amber text-xl text-black transition-transform duration-300 motion-safe:group-hover:translate-x-1 lg:order-last"
+        aria-hidden="true"
+      >
+        <ArrowIcon />
+      </span>
+    </div>
+
+    <div class="self-start rounded-card bg-amber p-4 md:p-5 lg:self-center">
+      <Image
+        src={cover.src}
+        alt={cover.alt}
+        widths={[480, 920]}
+        sizes="(min-width: 1024px) 460px, (min-width: 760px) 320px, calc(100vw - 48px)"
+        class="block h-auto w-full rounded-lg transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
+      />
+    </div>
+
+    <div>
+      <p class="font-mono text-[13px] tracking-widest text-text-muted uppercase">{kind} · {year}</p>
+      <h2 class="mt-3 text-[clamp(2rem,3.4vw,2.75rem)] leading-tight">
+        <!-- The link's ::after covers the whole row, so anywhere on it opens the case study. -->
+        <a href={`/work/${project.id}`} class="transition-colors after:absolute after:inset-0 group-hover:text-amber">
+          {title}
+        </a>
+      </h2>
+      <p class="mt-3 max-w-xl text-lg leading-relaxed text-text-muted">{summary}</p>
+      <ul class="mt-5 flex flex-wrap gap-2" aria-label="Stack">
+        {
+          stack.map((item) => (
+            <li class="rounded-full border border-line px-3.5 py-1.5 font-mono text-[13px] text-text-soft">{item}</li>
+          ))
+        }
+      </ul>
+    </div>
+  </article>
+</li>

@@ -42,7 +42,8 @@ const projects = defineCollection({
         }),
         cover: picture,
         // Optional cover for screens under 760 px (e.g. a tall phone-sized screenshot).
-        coverMobile: picture.optional(),
+        // No alt of its own: both covers share one <picture>, so cover.alt describes them both.
+        coverMobile: z.strictObject({ src: image() }).optional(),
         // Optional terminal card for the home hero, shown when this is the latest ship.
         terminal: z
           .strictObject({

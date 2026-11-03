@@ -1,54 +1,23 @@
 ---
-// TEMPORARY (Slice 2): a plain list that proves the collections load.
-// The designed Work page replaces this in a later slice.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ArrowIcon from '../../components/ArrowIcon.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import WorkHero from '../../components/work/WorkHero.astro';
+import WorkList from '../../components/work/WorkList.astro';
+import { newestFirst } from '../../lib/projects';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const projects = (await getCollection('projects')).sort(newestFirst);
 ---
 
-<BaseLayout title="Work" description="Every project Abraham Bassey has shipped, with a case study for each.">
-  <div class="container-site space-y-12 pt-36 pb-24">
-    <section>
-      <h1 class="text-4xl">All work (temporary page)</h1>
-      <p class="mt-2 text-text-muted">{projects.length} project(s) loaded from src/content/projects.</p>
-      <ul class="mt-6 list-disc space-y-2 pl-6">
-        {
-          projects.map((project) => (
-            <li>
-              <a class="inline-flex items-center gap-1 text-amber underline" href={`/work/${project.id}`}>
-                {project.data.title} <ArrowIcon />
-              </a>
-              <span class="text-text-muted">
-                {' '}
-                · {project.data.kind} · {project.data.year} · tags: {project.data.tags.join(', ')}
-                {project.data.featured && ' · featured'}
-              </span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="text-2xl">Services ({services.length})</h2>
-      <ul class="mt-4 list-disc space-y-2 pl-6">
-        {
-          services.map((service) => (
-            <li>
-              {service.data.title}:{' '}
-              <a
-                class="inline-flex items-center gap-1 text-amber underline"
-                href={`/work/${service.data.proof.project.id}#${service.data.proof.section}`}
-              >
-                {service.data.proof.label} <ArrowIcon />
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-  </div>
+<BaseLayout
+  title="Work"
+  description="Every project Abraham Bassey has shipped, each with a case study: the problem, how it works and how it was tested."
+>
+  <WorkHero projects={projects} />
+  <WorkList projects={projects} />
+  <section class="bg-black pt-16 pb-2 md:pt-20 md:pb-1">
+    <div class="container-site">
+      <CtaBlock heading="Your project could be the next one here." />
+    </div>
+  </section>
 </BaseLayout>

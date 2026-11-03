@@ -1,0 +1,98 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { projectTags } from '../../lib/projects';
+import ProjectRow from './ProjectRow.astro';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[]; // already sorted newest first
+}
+
+const { projects } = Astro.props;
+
+const filters = [
+  { value: 'all', label: 'All', noun: '', count: projects.length },
+  ...projectTags.map(({ tag, label, noun }) => ({
+    value: tag,
+    label,
+    noun,
+    count: projects.filter((project) => project.data.tags.includes(tag)).length,
+  })),
+];
+
+const emptyMessage = (noun: string) =>
+  `No ${noun ? `${noun} ` : ''}projects published yet. They'll appear here as soon as they ship.`;
+---
+
+<section class="bg-black pt-10 pb-8 md:pt-12">
+  <div class="container-site" data-work-list>
+    <!--
+      Hidden until the script below runs: without JavaScript the buttons could not work,
+      and every project is listed anyway.
+    -->
+    <div role="group" aria-label="Filter projects" class="flex flex-wrap gap-2.5 pt-2 pb-6" data-filters hidden>
+      {
+        filters.map((filter) => (
+          <button
+            type="button"
+            data-filter={filter.value}
+            data-noun={filter.noun}
+            aria-pressed={filter.value === 'all' ? 'true' : 'false'}
+            class="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-5 font-button text-[15px] font-medium tracking-label text-text-soft transition-colors hover:border-white hover:text-white aria-pressed:border-amber aria-pressed:bg-amber aria-pressed:text-black"
+          >
+            {filter.label}
+            <span class="font-mono text-xs opacity-70" aria-hidden="true">
+              {filter.count}
+            </span>
+            <span class="sr-only">
+              , {filter.count} {filter.count === 1 ? 'project' : 'projects'}
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    <ol class="border-b border-line">
+      {projects.map((project, i) => <ProjectRow project={project} number={i + 1} />)}
+    </ol>
+
+    <p class="py-16 text-center text-lg text-text-muted" data-empty hidden={projects.length > 0}>
+      {emptyMessage('')}
+    </p>
+
+    <!-- Screen readers hear how many projects a filter shows. -->
+    <p class="sr-only" aria-live="polite" data-status></p>
+  </div>
+</section>
+
+<script>
+  for (const list of document.querySelectorAll<HTMLElement>('[data-work-list]')) {
+    const filterBar = list.querySelector<HTMLElement>('[data-filters]');
+    const buttons = [...list.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const rows = [...list.querySelectorAll<HTMLElement>('[data-tags]')];
+    const empty = list.querySelector<HTMLElement>('[data-empty]');
+    const status = list.querySelector<HTMLElement>('[data-status]');
+    if (!filterBar || !empty || !status) continue;
+
+    filterBar.hidden = false;
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter ?? 'all';
+        const noun = button.dataset.noun ? `${button.dataset.noun} ` : '';
+
+        for (const other of buttons) other.setAttribute('aria-pressed', String(other === button));
+
+        let shown = 0;
+        for (const row of rows) {
+          const match = filter === 'all' || (row.dataset.tags ?? '').split(' ').includes(filter);
+          row.hidden = !match;
+          if (match) shown++;
+        }
+
+        empty.textContent = `No ${noun}projects published yet. They'll appear here as soon as they ship.`;
+        empty.hidden = shown > 0;
+        status.textContent = shown > 0 ? `Showing ${shown} ${noun}${shown === 1 ? 'project' : 'projects'}.` : empty.textContent;
+      });
+    }
+  }
+</script>

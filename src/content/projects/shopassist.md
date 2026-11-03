@@ -21,7 +21,6 @@ cover:
   alt: The Loom & Lane demo store with the ShopAssist chat open, answering a customer's question about the price of the Gold stitch black kaftan.
 coverMobile:
   src: ../../assets/projects/shopassist/chat-panel.webp
-  alt: The ShopAssist chat panel on the Loom & Lane store, where the assistant tells a shopper that the Gold stitch black kaftan costs ₦54,000.
 terminal:
   method: POST
   path: /conversations/42/messages
