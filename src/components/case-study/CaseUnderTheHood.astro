@@ -20,8 +20,14 @@ const lastIndex = diagram.steps.length - 1;
       {heading.before}<span class="text-amber">{heading.last}</span>
     </h2>
 
-    <!-- The request's path through the system: a row on desktop, a column on phones. -->
-    <ol class="mt-12 flex flex-col items-stretch gap-3 rounded-card-lg bg-black p-6 md:p-10 lg:flex-row lg:items-center">
+    <!--
+      The request's path through the system: a row on desktop, a column on phones.
+      data-diagram: it draws step by step as it scrolls into view (script below).
+    -->
+    <ol
+      class="mt-12 flex flex-col items-stretch gap-3 rounded-card-lg bg-black p-6 md:p-10 lg:flex-row lg:items-center"
+      data-diagram
+    >
       {
         diagram.steps.map((step, i) => (
           <li class="flex flex-col items-center gap-3 lg:flex-1 lg:flex-row">
@@ -58,3 +64,22 @@ const lastIndex = diagram.steps.length - 1;
     </ul>
   </div>
 </section>
+
+<script>
+  import { CLEAR, gsap, withMotion } from '../../lib/motion';
+
+  withMotion(() => {
+    for (const diagram of document.querySelectorAll<HTMLElement>('[data-diagram]')) {
+      // Each step box appears, then the arrow to the next one, in order.
+      const timeline = gsap.timeline({ scrollTrigger: { trigger: diagram, start: 'top 75%', once: true } });
+      for (const step of diagram.children) {
+        const box = step.firstElementChild;
+        const arrow = step.querySelector(':scope > svg');
+        timeline.from(box, { opacity: 0, scale: 0.92, duration: 0.45, ease: 'back.out(1.6)', clearProps: CLEAR });
+        if (arrow) {
+          timeline.from(arrow, { opacity: 0, scale: 0, duration: 0.25, ease: 'power2.out', clearProps: CLEAR }, '-=0.1');
+        }
+      }
+    }
+  });
+</script>

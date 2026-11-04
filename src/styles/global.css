@@ -84,6 +84,18 @@
   background-image: linear-gradient(217deg, #ffbb18 69%, #f4f4f4 100%);
 }
 
+/*
+  Page-to-page transitions, built into the browser (cross-document view transitions).
+  Pages cross-fade, and an element with the same view-transition-name on both pages, such as a
+  project's cover image, moves from its old place to its new one. Browsers without support just
+  load the next page normally. Not turned on when the device asks for reduced motion.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 @layer base {
   html {
     @apply bg-black font-sans text-white antialiased;

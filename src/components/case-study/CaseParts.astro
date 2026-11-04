@@ -26,7 +26,8 @@ const backdrops = ['bg-amber', 'bg-light', 'bg-black'];
       </h2>
     </div>
 
-    <ol class="mt-14 grid gap-4 lg:grid-cols-3">
+    <!-- data-reveal: the cards rise in one after another as the list scrolls into view (script below). -->
+    <ol class="mt-14 grid gap-4 lg:grid-cols-3" data-reveal>
       {
         parts.map((part, i) => {
           // Tall screenshots (like a chat panel) are shown narrower so they are not blown up.
@@ -67,3 +68,21 @@ const backdrops = ['bg-amber', 'bg-light', 'bg-black'];
     </ol>
   </div>
 </section>
+
+<script>
+  import { CLEAR, gsap, withMotion } from '../../lib/motion';
+
+  withMotion(() => {
+    for (const list of document.querySelectorAll<HTMLElement>('[data-reveal]')) {
+      gsap.from(list.children, {
+        y: 48,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.18, // one after another
+        clearProps: CLEAR,
+        scrollTrigger: { trigger: list, start: 'top 80%', once: true },
+      });
+    }
+  });
+</script>

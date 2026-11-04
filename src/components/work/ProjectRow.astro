@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import ArrowIcon from '../ArrowIcon.astro';
+import { coverTransition } from '../../lib/projects';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -34,6 +35,7 @@ const { title, summary, kind, year, stack, tags, cover } = project.data;
         alt={cover.alt}
         widths={[480, 920]}
         sizes="(min-width: 1024px) 460px, (min-width: 760px) 320px, calc(100vw - 48px)"
+        style={coverTransition(project.id)}
         class="block h-auto w-full rounded-lg transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
       />
     </div>

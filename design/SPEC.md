@@ -76,8 +76,9 @@ The first project entry is ShopAssist: timeline 3 weeks, October to November 202
 ## Motion
 
 - Home: headline words rise in on load; the terminal card types its lines in order; the capabilities strip scrolls slowly, pauses on hover, and has a pause/play button (keyboard focusable, at least 44 px, labelled "Pause scrolling" / "Play scrolling", not shown under reduced motion) so keyboard and touch users can stop it; service cards lift on hover; the featured project's screens fan apart as it scrolls into view.
-- Clicking a project carries its image into the case study page (Astro view transitions).
-- Case study: the parts reveal in turn; the diagram draws step by step as it scrolls into view; quality numbers count up once.
+- Clicking a project carries its image into the case study page. This uses the browser's own cross-document view transitions (`@view-transition` in `global.css` plus a shared `view-transition-name` on the cover in the home card, the Work row and the case study hero), not Astro's client router, so pages stay plain multi-page HTML and every page script keeps working. Browsers without support load the page normally.
+- Case study: the parts reveal in turn; the diagram draws step by step as it scrolls into view; quality numbers count up once (screen readers always get the final value).
+- Scroll animations use GSAP's ScrollTrigger through `src/lib/motion.ts`: `gsap.from()` only, so content is fully visible without JavaScript, and each tween clears its inline styles when it finishes so the stylesheet takes over again.
 
 ## Quality bar
 

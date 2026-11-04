@@ -3,6 +3,7 @@ import { getImage, Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import Button from '../Button.astro';
 import Pill from '../Pill.astro';
+import { coverTransition } from '../../lib/projects';
 import { splitAround } from '../../lib/text';
 
 interface Props {
@@ -88,6 +89,7 @@ const facts = [
               width={art.narrow.attributes.width}
               height={art.narrow.attributes.height}
               alt={cover.alt}
+              style={coverTransition(Astro.props.project.id)}
               loading="eager"
               fetchpriority="high"
               decoding="async"
@@ -100,6 +102,7 @@ const facts = [
             alt={cover.alt}
             widths={[640, 1144, 1900]}
             sizes={coverSizes}
+            style={coverTransition(Astro.props.project.id)}
             loading="eager"
             fetchpriority="high"
             class="block h-auto w-full rounded-t-xl"

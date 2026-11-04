@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { coverTransition } from '../../lib/projects';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -15,7 +16,8 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
 ---
 
 <article class="group relative overflow-hidden rounded-card-lg border border-line bg-charcoal">
-  <div class="relative aspect-[2.14] overflow-hidden bg-linear-to-b from-charcoal to-black">
+  <!-- data-fan: the side screens start tucked behind the cover and fan apart on scroll (script below). -->
+  <div class="relative aspect-[2.14] overflow-hidden bg-linear-to-b from-charcoal to-black" data-fan>
     {
       left && (
         <Image
@@ -23,6 +25,7 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
           alt={left.alt}
           widths={[320, 640]}
           sizes="(min-width: 1288px) 500px, 40vw"
+          data-fan-side="left"
           class="absolute top-[10%] left-[5%] w-[40%] -rotate-4 rounded-md shadow-2xl shadow-black/60 transition-transform duration-500 motion-safe:group-hover:-translate-x-2"
         />
       )
@@ -34,6 +37,7 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
           alt={right.alt}
           widths={[320, 640]}
           sizes="(min-width: 1288px) 500px, 40vw"
+          data-fan-side="right"
           class="absolute top-[8.5%] right-[5%] w-[40%] rotate-4 rounded-md shadow-2xl shadow-black/60 transition-transform duration-500 motion-safe:group-hover:translate-x-2"
         />
       )
@@ -43,6 +47,7 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
       alt={cover.alt}
       widths={[480, 960, 1300]}
       sizes="(min-width: 1288px) 650px, 52vw"
+      style={coverTransition(project.id)}
       class="absolute top-[20%] left-1/2 w-[52%] -translate-x-1/2 rounded-lg border-[3px] border-amber shadow-2xl shadow-black/70"
     />
   </div>
@@ -65,3 +70,23 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
     </ul>
   </div>
 </article>
+
+<script>
+  import { CLEAR, gsap, withMotion } from '../../lib/motion';
+
+  withMotion(() => {
+    for (const fan of document.querySelectorAll<HTMLElement>('[data-fan]')) {
+      const sides = fan.querySelectorAll<HTMLElement>('[data-fan-side]');
+      gsap.from(sides, {
+        // Start pulled in behind the cover and straight, then fan out to their CSS positions and tilts.
+        xPercent: (_i: number, el: HTMLElement) => (el.dataset.fanSide === 'left' ? 45 : -45),
+        rotation: 0,
+        opacity: 0,
+        duration: 1.1,
+        ease: 'power3.out',
+        clearProps: CLEAR,
+        scrollTrigger: { trigger: fan, start: 'top 75%', once: true },
+      });
+    }
+  });
+</script>
