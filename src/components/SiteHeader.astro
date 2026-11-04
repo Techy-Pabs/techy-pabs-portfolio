@@ -1,11 +1,21 @@
 ---
 import ArrowIcon from './ArrowIcon.astro';
 import Logo from './Logo.astro';
-import { navLinks } from '../site';
+import { navLinks, site } from '../site';
 
 // "/work/shopassist/" -> "/work/shopassist", so Work stays highlighted on case studies.
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+
+// The header button. On the contact page "Start a project" would link to itself, so it offers
+// Upwork instead, and is left out until the Upwork link is filled in.
+const cta =
+  path === '/contact'
+    ? site.upwork
+      ? { label: 'Hire on Upwork', href: site.upwork, external: true }
+      : null
+    : { label: 'Start a project', href: '/contact', external: false };
+const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
 ---
 
 <header class="absolute inset-x-0 top-0 z-30">
@@ -34,12 +44,19 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
       </ul>
     </nav>
 
-    <a
-      href="/contact"
-      class="hidden min-h-11 items-center justify-self-end rounded-full border border-amber px-5 font-button text-[15px] font-medium tracking-label text-amber transition-colors hover:bg-amber hover:text-black md:inline-flex"
-    >
-      Start a project
-    </a>
+    {
+      cta ? (
+        <a
+          href={cta.href}
+          {...ctaTarget}
+          class="hidden min-h-11 items-center justify-self-end rounded-full border border-amber px-5 font-button text-[15px] font-medium tracking-label text-amber transition-colors hover:bg-amber hover:text-black md:inline-flex"
+        >
+          {cta.label}
+        </a>
+      ) : (
+        <span class="hidden md:block" aria-hidden="true" />
+      )
+    }
 
     <!-- Phone: round menu button that opens the full screen menu below. -->
     <button
@@ -103,12 +120,17 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
         </ul>
       </nav>
 
-      <a
-        href="/contact"
-        class="mt-auto flex min-h-12 items-center justify-center gap-2 rounded-full bg-button-primary font-button text-base font-medium tracking-label text-black"
-      >
-        Start a project <ArrowIcon />
-      </a>
+      {
+        cta && (
+          <a
+            href={cta.href}
+            {...ctaTarget}
+            class="mt-auto flex min-h-12 items-center justify-center gap-2 rounded-full bg-button-primary font-button text-base font-medium tracking-label text-black"
+          >
+            {cta.label} <ArrowIcon />
+          </a>
+        )
+      }
     </div>
   </dialog>
 </header>

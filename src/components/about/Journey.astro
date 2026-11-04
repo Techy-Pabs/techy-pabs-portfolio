@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Pill from '../Pill.astro';
+import { about, type TimelineEntry } from '../../data/about';
+
+type Row = TimelineEntry & { href?: string }; // project entries link to their case study
+
+// Every shipped project becomes a timeline entry, using its project file's title and ship date.
+const projects = await getCollection('projects');
+const projectEntries: Row[] = projects.map((project) => ({
+  year: project.data.shipped.getFullYear(),
+  title: `Shipped ${project.data.title}`,
+  text: about.journey.projectNotes[project.id] ?? project.data.summary,
+  href: `/work/${project.id}`,
+}));
+
+// Newest year first; entries without a real year yet (placeholders) keep their order at the end.
+const yearValue = (entry: TimelineEntry) => (typeof entry.year === 'number' ? entry.year : -Infinity);
+const timeline: Row[] = [...projectEntries, ...about.journey.entries].sort((a, b) => yearValue(b) - yearValue(a));
+---
+
+<section class="bg-light py-24 text-charcoal md:py-28">
+  <div class="container-site grid gap-10 lg:grid-cols-[minmax(0,336px)_minmax(0,1fr)]">
+    <div>
+      <Pill tone="light">Journey</Pill>
+      <h2 class="mt-5 text-[clamp(2.5rem,4vw,3.5rem)] leading-[1.02]">{about.journey.title}</h2>
+    </div>
+
+    <ol class="border-t border-charcoal">
+      {
+        timeline.map((entry) => (
+          <li class="grid gap-2 border-b border-black/10 py-7 sm:grid-cols-[120px_minmax(0,1fr)] sm:gap-6">
+            <p class="pt-1 font-mono text-sm text-text-muted-light">{entry.year}</p>
+            <div>
+              <h3 class="text-[22px] leading-tight">
+                {entry.href ? (
+                  <a href={entry.href} class="underline-offset-4 hover:underline">
+                    {entry.title}
+                  </a>
+                ) : (
+                  entry.title
+                )}
+              </h3>
+              <p class="mt-2 leading-relaxed text-text-muted-light">{entry.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

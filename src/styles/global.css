@@ -18,6 +18,7 @@
   --color-text-muted: #a8a49e;
   --color-text-muted-light: #494c4f;
   --color-line: rgb(249 249 249 / 0.16);
+  --color-error: #b3261e; /* form error messages on light backgrounds (6:1 on light) */
   --color-transparent: transparent;
   --color-current: currentColor;
 

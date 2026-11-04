@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Pill from '../components/Pill.astro';
+---
+
+<!-- Astro builds this as 404.html, which Vercel shows for any address that doesn't exist. -->
+<BaseLayout title="Page not found" description="This page doesn't exist on the Techy Pabs site." bodyClass="bg-hero">
+  <section class="pt-40 pb-28 md:pt-48 md:pb-36">
+    <div class="container-site">
+      <Pill>404</Pill>
+      <h1 class="mt-6 max-w-4xl text-[clamp(3rem,7vw,6rem)] leading-[0.98]">
+        This page doesn't <span class="text-amber">exist.</span>
+      </h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-text-muted">
+        The link may be old, or the address may have a typo. These will get you back on track.
+      </p>
+      <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row">
+        <Button href="/" arrow>Home</Button>
+        <Button href="/work" variant="outline">See my work</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

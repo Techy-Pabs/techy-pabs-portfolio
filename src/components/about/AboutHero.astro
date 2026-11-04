@@ -1,0 +1,51 @@
+---
+import Button from '../Button.astro';
+import Pill from '../Pill.astro';
+import PortraitFrame from '../PortraitFrame.astro';
+import { about } from '../../data/about';
+import { portraits, site } from '../../site';
+
+interface Props {
+  cvUrl?: string; // only set when a CV file exists
+}
+
+const { cvUrl } = Astro.props;
+---
+
+<section class="overflow-x-clip bg-hero pt-32 md:pt-36">
+  <div class="container-site grid items-end gap-x-12 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)]">
+    <div class="lg:pb-24">
+      <Pill>About</Pill>
+      <h1 class="mt-6 text-[clamp(3.25rem,6.6vw,6rem)] leading-[0.98]">
+        {about.title.lead} <span class="text-amber">{about.title.highlight}</span>
+      </h1>
+      <p class="mt-7 max-w-xl text-[clamp(1.125rem,1.6vw,1.375rem)] leading-snug text-text-soft">{about.intro}</p>
+      <p class="mt-5 max-w-xl leading-relaxed text-text-muted">{about.story}</p>
+      <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row">
+        <Button href="/contact" arrow>Work with me</Button>
+        {
+          cvUrl && (
+            <Button href={cvUrl} variant="outline" download>
+              Download CV
+            </Button>
+          )
+        }
+      </div>
+    </div>
+
+    <PortraitFrame
+      image={portraits.about}
+      frameClass="bg-amber"
+      frameTop="38%"
+      sizes="(min-width: 1024px) 420px, (min-width: 760px) 420px, calc(100vw - 48px)"
+      eager
+      class="w-full max-w-[420px] md:mx-auto lg:mr-0"
+    >
+      <!-- Sits over the shoulder, below the chin, so it never covers the face. -->
+      <p class="absolute top-[77%] -left-[3%] rounded-xl border border-line bg-charcoal/90 px-4 py-2.5 shadow-xl shadow-black/50 backdrop-blur">
+        <span class="block font-mono text-[10px] tracking-widest text-text-muted uppercase">Based in</span>
+        <span class="block text-[15px] font-semibold text-white">{site.city} · {site.timezone}</span>
+      </p>
+    </PortraitFrame>
+  </div>
+</section>

@@ -1,0 +1,201 @@
+---
+import ArrowIcon from '../ArrowIcon.astro';
+import { budgetRanges, projectTypes, site } from '../../site';
+
+// Shared look for text boxes. aria-invalid (set by the script below) turns the border red.
+const control =
+  'mt-2 block w-full rounded-2xl border border-black/15 bg-white px-4 text-[17px] text-charcoal placeholder:text-text-muted-light/70 focus-visible:outline-charcoal aria-invalid:border-error';
+const label = 'text-[15px] font-semibold';
+const error = 'mt-2 text-sm font-medium text-error';
+---
+
+<!--
+  Without JavaScript the form still works: the browser checks the required fields and the
+  mailto: action opens the email app. With JavaScript, the script below takes over.
+-->
+<form
+  id="contact-form"
+  action={`mailto:${site.email}`}
+  method="post"
+  enctype="text/plain"
+  data-to={site.email}
+  aria-labelledby="form-title"
+  class="rounded-card-lg bg-light p-7 text-charcoal md:p-11"
+>
+  <h2 id="form-title" class="text-[32px] leading-tight">Project details</h2>
+
+  <div class="mt-7 grid gap-5 md:grid-cols-2">
+    <div>
+      <label for="name" class={label}>Your name</label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        required
+        placeholder="Jane Doe"
+        aria-describedby="name-error"
+        class:list={[control, 'h-14']}
+      />
+      <p id="name-error" class={error} hidden></p>
+    </div>
+    <div>
+      <label for="email" class={label}>Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        inputmode="email"
+        spellcheck="false"
+        required
+        placeholder="jane@company.com"
+        aria-describedby="email-error"
+        class:list={[control, 'h-14']}
+      />
+      <p id="email-error" class={error} hidden></p>
+    </div>
+  </div>
+
+  <fieldset class="mt-6" aria-describedby="need-error">
+    <legend class={label}>What do you need?</legend>
+    <div class="mt-3 flex flex-wrap gap-2.5">
+      {
+        projectTypes.map((type) => (
+          <label class="inline-flex min-h-12 cursor-pointer items-center gap-3 rounded-full border border-black/15 bg-white px-5 text-[15px] transition-colors has-checked:border-charcoal has-checked:bg-charcoal has-checked:text-white has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-charcoal">
+            <input
+              type="radio"
+              name="need"
+              value={type}
+              required
+              aria-describedby="need-error"
+              class="size-4 accent-amber focus-visible:outline-none"
+            />
+            {type}
+          </label>
+        ))
+      }
+    </div>
+    <p id="need-error" class={error} hidden></p>
+  </fieldset>
+
+  <div class="mt-6">
+    <label for="budget" class={label}>Budget range</label>
+    <select id="budget" name="budget" required aria-describedby="budget-error" class:list={[control, 'h-14']}>
+      <option value="">Choose a budget range</option>
+      {budgetRanges.map((range) => <option value={range}>{range}</option>)}
+    </select>
+    <p id="budget-error" class={error} hidden></p>
+  </div>
+
+  <div class="mt-6">
+    <label for="message" class={label}>Tell me about the project</label>
+    <textarea
+      id="message"
+      name="message"
+      rows="5"
+      required
+      placeholder="What are you building, who is it for, and what should it do?"
+      aria-describedby="message-error"
+      class:list={[control, 'py-3.5']}></textarea>
+    <p id="message-error" class={error} hidden></p>
+  </div>
+
+  <div class="mt-7">
+    <button
+      type="submit"
+      class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-black px-6 font-button text-[15px] font-medium tracking-label text-white transition-colors hover:text-amber focus-visible:outline-charcoal"
+    >
+      Send message <ArrowIcon />
+    </button>
+    <p class="mt-3 text-sm text-text-muted-light">
+      Sending opens your email app with your message ready to send to {site.email}.
+    </p>
+    <!-- Read out by screen readers when it changes. -->
+    <p role="alert" class="mt-3 text-sm font-medium text-error empty:hidden" data-summary></p>
+    <p role="status" class="mt-3 text-sm font-medium text-charcoal empty:hidden" data-status></p>
+  </div>
+</form>
+
+<script>
+  import { sendEnquiry, type Enquiry } from '../../lib/contact';
+
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+
+  if (form) {
+    const to = form.dataset.to ?? '';
+    const summary = form.querySelector<HTMLElement>('[data-summary]');
+    const status = form.querySelector<HTMLElement>('[data-status]');
+
+    // Our own messages replace the browser's pop-ups, so they can be read out and styled.
+    form.noValidate = true;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const checks: { name: keyof Enquiry; problem: (value: string) => string | null }[] = [
+      { name: 'name', problem: (v) => (v ? null : 'Please enter your name.') },
+      {
+        name: 'email',
+        problem: (v) =>
+          !v
+            ? 'Please enter your email address.'
+            : emailPattern.test(v)
+              ? null
+              : 'Please enter a valid email address, like jane@company.com.',
+      },
+      { name: 'need', problem: (v) => (v ? null : 'Please choose what you need.') },
+      { name: 'budget', problem: (v) => (v ? null : 'Please choose a budget range.') },
+      { name: 'message', problem: (v) => (v ? null : 'Please tell me a little about the project.') },
+    ];
+
+    const valueOf = (name: string) => String(new FormData(form).get(name) ?? '').trim();
+    const controlsOf = (name: string) => [...form.querySelectorAll<HTMLElement>(`[name="${name}"]`)];
+
+    function showProblem(name: string, problem: string | null) {
+      const message = form!.querySelector<HTMLElement>(`#${name}-error`);
+      if (message) {
+        message.textContent = problem ?? '';
+        message.hidden = !problem;
+      }
+      for (const control of controlsOf(name)) {
+        if (problem) control.setAttribute('aria-invalid', 'true');
+        else control.removeAttribute('aria-invalid');
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (status) status.textContent = '';
+
+      const failed = checks.filter((check) => {
+        const problem = check.problem(valueOf(check.name));
+        showProblem(check.name, problem);
+        return problem !== null;
+      });
+
+      if (failed.length > 0) {
+        if (summary) {
+          summary.textContent = `Please fix ${failed.length === 1 ? '1 field' : `${failed.length} fields`} to send your message.`;
+        }
+        controlsOf(failed[0].name)[0]?.focus();
+        return;
+      }
+
+      if (summary) summary.textContent = '';
+      const enquiry = Object.fromEntries(checks.map((check) => [check.name, valueOf(check.name)])) as unknown as Enquiry;
+      const result = await sendEnquiry(enquiry, { to });
+      if (result.ok && status) {
+        status.textContent = `Your email app should open with the message ready to send. If it doesn't, email ${to} directly.`;
+      }
+    });
+
+    // Once a field has shown a problem, re-check it as the visitor fixes it.
+    const recheck = (event: Event) => {
+      const name = (event.target as HTMLInputElement).name;
+      const check = checks.find((c) => c.name === name);
+      const message = form.querySelector<HTMLElement>(`#${name}-error`);
+      if (check && message && !message.hidden) showProblem(name, check.problem(valueOf(name)));
+    };
+    form.addEventListener('input', recheck);
+    form.addEventListener('change', recheck);
+  }
+</script>

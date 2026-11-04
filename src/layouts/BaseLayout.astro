@@ -16,9 +16,10 @@ import { site } from '../site';
 interface Props {
   title: string;
   description: string;
+  bodyClass?: string; // e.g. "bg-hero" for a page whose gradient runs behind the footer too
 }
 
-const { title, description } = Astro.props;
+const { title, description, bodyClass } = Astro.props;
 const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 ---
 
@@ -33,7 +34,7 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
   </head>
-  <body class="flex min-h-dvh flex-col">
+  <body class:list={['flex min-h-dvh flex-col', bodyClass]}>
     <a
       href="#main"
       class="sr-only z-50 rounded-full bg-amber px-5 py-3 font-button font-medium text-black focus:not-sr-only focus:fixed focus:top-4 focus:left-4"

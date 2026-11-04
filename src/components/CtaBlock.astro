@@ -1,17 +1,18 @@
 ---
-// The amber closing card with a heading and a "Start a project" button.
+// The amber closing card with a heading and a button to the contact page.
 import Button from './Button.astro';
 
 interface Props {
   heading: string;
+  buttonLabel?: string;
 }
 
-const { heading } = Astro.props;
+const { heading, buttonLabel = 'Start a project' } = Astro.props;
 ---
 
 <div
   class="grid gap-8 rounded-card-lg bg-button-primary p-12 text-black max-sm:py-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center"
 >
   <h2 class="max-w-2xl text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.02]">{heading}</h2>
-  <Button href="/contact" variant="black" arrow class="justify-self-start">Start a project</Button>
+  <Button href="/contact" variant="black" arrow class="justify-self-start">{buttonLabel}</Button>
 </div>

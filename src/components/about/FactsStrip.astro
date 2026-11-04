@@ -1,0 +1,17 @@
+---
+import { about } from '../../data/about';
+---
+
+<section aria-label="Quick facts" class="bg-amber py-10 text-black md:py-12">
+  <!-- 2 by 2 below 1024 px, one row of four above. The value size steps down on phones so two fit side by side. -->
+  <dl class="container-site grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
+    {
+      about.facts.map((fact) => (
+        <div class="flex min-w-0 flex-col-reverse">
+          <dt class="mt-1 text-[15px] text-charcoal">{fact.label}</dt>
+          <dd class="text-[2rem] leading-none font-bold tracking-heading sm:text-[2.5rem] lg:text-[2.75rem]">{fact.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>

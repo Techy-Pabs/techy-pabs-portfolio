@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+import AboutHero from '../components/about/AboutHero.astro';
+import Credentials from '../components/about/Credentials.astro';
+import FactsStrip from '../components/about/FactsStrip.astro';
+import Journey from '../components/about/Journey.astro';
+import WhatIBring from '../components/about/WhatIBring.astro';
+import { about } from '../data/about';
+
+// Drop a PDF into src/assets/cv/ and the "Download CV" button appears; with no file, it stays hidden.
+const cvFiles = import.meta.glob<string>('../assets/cv/*.pdf', { eager: true, query: '?url', import: 'default' });
+const cvUrl = Object.values(cvFiles)[0];
+---
+
+<BaseLayout
+  title="About"
+  description="Abraham Bassey is an AI backend engineer in Lagos building APIs, databases and AI pipelines for products that need to work."
+>
+  <AboutHero cvUrl={cvUrl} />
+  <FactsStrip />
+  <WhatIBring />
+  <Journey />
+  {about.credentials.length > 0 && <Credentials />}
+  <section class="bg-black pt-24 pb-2 md:pt-28 md:pb-1">
+    <div class="container-site">
+      <CtaBlock heading={about.closing} buttonLabel="Get in touch" />
+    </div>
+  </section>
+</BaseLayout>

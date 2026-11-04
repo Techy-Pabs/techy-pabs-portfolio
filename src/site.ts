@@ -11,6 +11,11 @@ export const site = {
   // Still to be supplied. Empty links are left out until filled in.
   linkedin: '',
   upwork: '',
+  location: 'Lagos, Nigeria',
+  city: 'Lagos',
+  timezone: 'WAT (UTC+1)',
+  // DRAFT for Abraham to confirm.
+  replyTime: 'I usually reply within one working day.',
   // Placeholder until Abraham supplies his own words.
   bioShort:
     "[Two or three sentences in your own words: where you're based, what you build, and why you care about software that works the first time.]",
@@ -34,9 +39,15 @@ export const portraits = {
   about: { src: portraitAbout, alt: 'Abraham Bassey in a black sweatshirt, smiling slightly.' },
 };
 
-// Contact buttons, in order. Channels without a link yet are skipped.
+// Contact channels, in order. Channels without a link yet are skipped.
+// `label` is the button text on the home page; `kind` and `detail` are used on the contact page cards.
 export const contactChannels = [
-  { label: 'Hire me on Upwork', href: site.upwork, external: true },
-  { label: 'Chat on WhatsApp', href: site.whatsapp, external: true },
-  { label: 'Email me', href: `mailto:${site.email}`, external: false },
+  { kind: 'Upwork', label: 'Hire me on Upwork', detail: 'Hire me on Upwork', href: site.upwork, external: true },
+  { kind: 'WhatsApp', label: 'Chat on WhatsApp', detail: 'Chat on WhatsApp', href: site.whatsapp, external: true },
+  { kind: 'Email', label: 'Email me', detail: site.email, href: `mailto:${site.email}`, external: false },
 ].filter((channel) => channel.href !== '');
+
+// Contact form choices.
+export const projectTypes = ['AI assistant or RAG', 'API or backend', 'LLM integration', 'Not sure yet'];
+// DRAFT budget ranges for Abraham to confirm.
+export const budgetRanges = ['Under $500', '$500 to $1,500', '$1,500 to $5,000', '$5,000+', 'Not sure yet'];
