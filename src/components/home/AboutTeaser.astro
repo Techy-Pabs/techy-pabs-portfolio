@@ -1,28 +1,31 @@
 ---
 import Button from '../Button.astro';
+import CheckList from '../CheckList.astro';
 import Pill from '../Pill.astro';
 import PortraitFrame from '../PortraitFrame.astro';
-import { portraits, site } from '../../site';
+import { about } from '../../data/about';
+import { portraits } from '../../site';
 ---
 
 <section class="bg-light pt-24 pb-24 text-charcoal md:pt-28 md:pb-0">
-  <div class="container-site grid gap-x-16 gap-y-14 md:grid-cols-[minmax(0,380px)_minmax(0,1fr)] md:items-center">
+  <div
+    class="container-site grid gap-x-10 gap-y-14 md:grid-cols-[minmax(0,300px)_minmax(0,1fr)] md:items-center lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-x-16"
+  >
     <!-- On wider screens the portrait sits flush with the bottom edge of the section. -->
     <PortraitFrame
       image={portraits.about}
       frameClass="bg-charcoal"
       frameTop="38%"
-      sizes="(min-width: 760px) 380px, calc(100vw - 48px)"
+      sizes="(min-width: 1024px) 380px, (min-width: 760px) 300px, calc(100vw - 48px)"
       class="md:self-end"
     />
 
     <div class="md:py-12">
       <Pill tone="light">About</Pill>
-      <h2 class="mt-5 text-[clamp(2rem,3.4vw,3rem)] leading-[1.08]">
-        {site.owner}, the engineer behind {site.name}.
-      </h2>
-      <p class="mt-6 text-lg leading-relaxed text-text-muted-light">{site.bioShort}</p>
-      <Button href="/about" variant="dark" arrow class="mt-8">More about me</Button>
+      <h2 class="mt-5 text-[clamp(2rem,3.4vw,3rem)] leading-[1.08]">{about.teaser.heading}</h2>
+      <p class="mt-6 text-lg leading-relaxed text-text-muted-light">{about.paragraphs[0]}</p>
+      <CheckList items={about.values} tone="light" class="mt-7 max-w-lg" />
+      <Button href="/contact" variant="dark" arrow class="mt-9">Work with me</Button>
     </div>
   </div>
 </section>

@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Button from '../Button.astro';
+import Pill from '../Pill.astro';
+import { splitAround } from '../../lib/text';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+  project: CollectionEntry<'projects'>; // the project that proves this service
+}
+
+const { service, project } = Astro.props;
+const { title, hero } = service.data;
+const headline = splitAround(hero.headline, hero.highlight);
+---
+
+<section class="overflow-x-clip bg-hero pt-32 pb-20 md:pt-36 md:pb-24">
+  <div class="container-site grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)] lg:items-center">
+    <div>
+      <nav aria-label="Breadcrumb">
+        <ol class="flex flex-wrap items-center gap-2 text-[15px] text-text-soft">
+          <li><a href="/services" class="inline-flex min-h-11 items-center hover:text-amber">Services</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-white">{title}</li>
+        </ol>
+      </nav>
+      <Pill class="mt-2">{title}</Pill>
+      <h1 class="mt-6 text-[clamp(2.75rem,5.6vw,5.5rem)] leading-[0.98]">
+        {headline.before}<span class="text-amber">{headline.match}</span>{headline.after}
+      </h1>
+      <p class="mt-7 max-w-xl text-lg leading-relaxed text-text-muted">{hero.intro}</p>
+      <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row">
+        <Button href="/contact" arrow>{hero.cta}</Button>
+        <Button href={`/work/${project.id}`} variant="outline">See {project.data.title}</Button>
+      </div>
+    </div>
+
+    <!-- The screenshot sits on an amber panel; anything below the panel's height is cropped. -->
+    <div class="h-[420px] overflow-hidden rounded-card-lg bg-amber px-7 pt-7 md:h-[490px]">
+      <Image
+        src={hero.image.src}
+        alt={hero.image.alt}
+        widths={[340, 680]}
+        sizes="(min-width: 1024px) 290px, calc(100vw - 104px)"
+        loading="eager"
+        fetchpriority="high"
+        class="h-full w-full rounded-t-xl object-cover object-left-top shadow-2xl shadow-black/30"
+      />
+    </div>
+  </div>
+</section>

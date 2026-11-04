@@ -1,9 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import Pill from '../Pill.astro';
 import ServiceCard from './ServiceCard.astro';
+import { getServices } from '../../lib/services';
 
-const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const services = await getServices();
 ---
 
 <section class="bg-charcoal py-24 md:py-28">

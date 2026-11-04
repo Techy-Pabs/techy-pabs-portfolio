@@ -10,12 +10,12 @@ const projects = (await getCollection('projects')).sort(newestFirst);
 ---
 
 <BaseLayout
-  title="Work"
-  description="Every project Abraham Bassey has shipped, each with a case study: the problem, how it works and how it was tested."
+  title="AI and backend engineering portfolio"
+  description="AI and backend engineering portfolio of Abraham Bassey: every shipped project, each with a case study on the problem, how it works and how it was tested."
 >
   <WorkHero projects={projects} />
   <WorkList projects={projects} />
-  <section class="bg-black pt-16 pb-2 md:pt-20 md:pb-1">
+  <section class="bg-black pt-16 pb-24 md:pt-20 md:pb-28">
     <div class="container-site">
       <CtaBlock heading="Your project could be the next one here." />
     </div>

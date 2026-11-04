@@ -1,6 +1,11 @@
 ---
 import ArrowIcon from '../ArrowIcon.astro';
-import { budgetRanges, projectTypes, site } from '../../site';
+import { getServices } from '../../lib/services';
+import { budgetRanges, site } from '../../site';
+
+// One option per service (so new services appear automatically), plus "Not sure yet".
+const services = await getServices();
+const projectTypes = [...services.map((service) => service.data.shortName), 'Not sure yet'];
 
 // Shared look for text boxes. aria-invalid (set by the script below) turns the border red.
 const control =

@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import ArrowIcon from '../ArrowIcon.astro';
+import Pill from '../Pill.astro';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+  project: CollectionEntry<'projects'>; // the project named in the service's proof
+}
+
+const { service, project } = Astro.props;
+const { proof } = service.data;
+const { title, summary, timeline, cover } = project.data;
+const duration = timeline.split(' · ')[0]; // "3 weeks · Oct to Nov 2026" -> "3 weeks"
+---
+
+<section class="bg-black pt-24 pb-20 md:pt-28">
+  <div class="container-site">
+    <Pill>Proof</Pill>
+    <h2 class="mt-5 text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05]">
+      Built and shipped: <span class="text-amber">{title}.</span>
+    </h2>
+
+    <article
+      class="mt-10 grid overflow-hidden rounded-card-lg border border-line bg-charcoal lg:grid-cols-[minmax(0,1fr)_minmax(0,394px)]"
+    >
+      <div class="flex items-end bg-amber px-[5%] pt-[5%]">
+        <Image
+          src={cover.src}
+          alt={cover.alt}
+          widths={[640, 1100]}
+          sizes="(min-width: 1288px) 780px, 90vw"
+          class="block h-auto w-full rounded-t-lg"
+        />
+      </div>
+      <div class="flex flex-col justify-center p-8 md:p-10">
+        <p class="font-mono text-[13px] tracking-widest text-text-muted uppercase">Case study · {duration}</p>
+        <h3 class="mt-3 text-[clamp(1.75rem,2.6vw,2.25rem)] leading-tight">{title}</h3>
+        <p class="mt-4 leading-relaxed text-text-muted">{summary}</p>
+        <a
+          href={`/work/${project.id}#${proof.section}`}
+          class="mt-6 inline-flex min-h-11 items-center gap-1.5 font-semibold text-amber hover:underline"
+        >
+          {proof.label}
+          <ArrowIcon />
+        </a>
+      </div>
+    </article>
+  </div>
+</section>

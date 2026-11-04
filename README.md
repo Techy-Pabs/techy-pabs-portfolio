@@ -1,4 +1,4 @@
-# Techy Pabs
+# TechyPabs
 
 The portfolio site of Abraham Bassey, AI backend engineer. Built with Astro and Tailwind CSS as a static site. The build spec and approved mockups are in [`design/`](design/SPEC.md).
 

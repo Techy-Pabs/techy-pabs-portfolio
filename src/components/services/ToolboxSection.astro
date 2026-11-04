@@ -1,0 +1,25 @@
+---
+import Pill from '../Pill.astro';
+import { servicesPage } from '../../data/services-page';
+---
+
+<section class="bg-black py-24 md:py-28">
+  <div class="container-site text-center">
+    <Pill>Toolbox</Pill>
+    <h2 class="mt-5 text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05]">{servicesPage.toolbox.title}</h2>
+    <ul class="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-2.5">
+      {
+        servicesPage.toolbox.items.map((item) => (
+          <li
+            class:list={[
+              'rounded-full px-5 py-2.5 text-[17px]',
+              item.highlight ? 'bg-amber font-semibold text-black' : 'border border-line bg-charcoal text-text-soft',
+            ]}
+          >
+            {item.name}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

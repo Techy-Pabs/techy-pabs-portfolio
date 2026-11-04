@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+}
+
+const { deliverablesIntro, goodFor, deliverables } = Astro.props.service.data;
+---
+
+<section class="bg-light py-24 text-charcoal md:py-28">
+  <div class="container-site grid gap-12 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+    <div>
+      <h2 class="text-[clamp(2.5rem,4vw,3.5rem)] leading-[1.02]">What you get.</h2>
+      <p class="mt-5 text-lg leading-relaxed text-text-muted-light">{deliverablesIntro}</p>
+      <h3 class="mt-8 text-[15px] font-semibold tracking-normal">Good for</h3>
+      <ul class="mt-3 flex flex-wrap gap-2.5">
+        {goodFor.map((item) => <li class="rounded-full border border-black/15 bg-white px-4 py-2.5 text-[15px]">{item}</li>)}
+      </ul>
+    </div>
+
+    <ul class="grid gap-4 self-start sm:grid-cols-2 xl:grid-cols-3">
+      {
+        deliverables.map((item) => (
+          <li class="rounded-card border-t-4 border-amber bg-white p-6">
+            <h3 class="text-xl leading-tight tracking-[-0.01em]">{item.title}</h3>
+            <p class="mt-2 leading-relaxed text-text-muted-light">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

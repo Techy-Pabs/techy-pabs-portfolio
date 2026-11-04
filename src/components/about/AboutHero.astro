@@ -1,5 +1,6 @@
 ---
 import Button from '../Button.astro';
+import CheckList from '../CheckList.astro';
 import Pill from '../Pill.astro';
 import PortraitFrame from '../PortraitFrame.astro';
 import { about } from '../../data/about';
@@ -19,8 +20,12 @@ const { cvUrl } = Astro.props;
       <h1 class="mt-6 text-[clamp(3.25rem,6.6vw,6rem)] leading-[0.98]">
         {about.title.lead} <span class="text-amber">{about.title.highlight}</span>
       </h1>
-      <p class="mt-7 max-w-xl text-[clamp(1.125rem,1.6vw,1.375rem)] leading-snug text-text-soft">{about.intro}</p>
-      <p class="mt-5 max-w-xl leading-relaxed text-text-muted">{about.story}</p>
+      <p class="mt-7 max-w-xl text-[clamp(1.125rem,1.6vw,1.375rem)] leading-snug text-text-soft">
+        {about.paragraphs[0]}
+      </p>
+      {about.paragraphs.slice(1).map((paragraph) => <p class="mt-5 max-w-xl leading-relaxed text-text-muted">{paragraph}</p>)}
+      <p class="mt-5 max-w-xl text-lg font-bold text-white">{about.closingLine}</p>
+      <CheckList items={about.values} class="mt-7 max-w-lg" />
       <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row">
         <Button href="/contact" arrow>Work with me</Button>
         {

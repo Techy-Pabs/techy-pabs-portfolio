@@ -22,7 +22,10 @@ const { Content } = await render(project);
 const hasBody = Boolean(project.body?.trim());
 ---
 
-<BaseLayout title={`${project.data.title} case study`} description={project.data.summary}>
+<BaseLayout
+  title={`${project.data.title} case study: ${project.data.kind}`}
+  description={`${project.data.title} case study: ${project.data.summary}`}
+>
   <CaseHero project={project} />
   <CaseProblem project={project} />
   <CaseParts project={project} />

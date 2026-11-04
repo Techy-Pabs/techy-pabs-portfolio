@@ -63,7 +63,7 @@ diagram:
     - label: Client
       text: Customer question
     - label: FastAPI
-      text: Auth check, injection guard
+      text: Auth check, conversation ownership
       highlight: true
     - label: Postgres + pgvector
       text: Find matching chunks

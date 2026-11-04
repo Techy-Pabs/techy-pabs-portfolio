@@ -1,10 +1,9 @@
 /*
-  All the text on the About page, in one place.
-  Lines marked PLACEHOLDER are waiting for Abraham's own words: replace the text in [brackets].
+  All the About text, in one place: the About page and the About teaser on the home page.
 */
 
 export interface TimelineEntry {
-  year: number | string; // a number sorts by year; text such as "[Year]" stays at the end
+  year: number | string; // a number sorts by year; text stays at the end
   title: string;
   text: string;
 }
@@ -18,10 +17,19 @@ export interface Credential {
 
 export const about = {
   title: { lead: "Hi, I'm", highlight: 'Abraham.' },
-  intro: "I'm the engineer behind Techy Pabs. I build the backend and AI systems that make products actually work.",
-  // PLACEHOLDER
-  story:
-    '[Your story in a few sentences: how you got into building software, what draws you to backend and AI work, and what clients can expect working with you.]',
+
+  // The three About paragraphs. The home teaser shows the first one only.
+  paragraphs: [
+    "Hey, I'm Abraham Bassey, founder of TechyPabs, where solid backend engineering meets practical AI. I build the systems behind a product, the APIs, databases and AI features that decide whether it actually works.",
+    "I started TechyPabs to help businesses get software and AI they can trust. Whatever the product, the standard is the same: clean architecture, secure data, AI that's grounded and tested, and systems that keep working as the business grows.",
+  ],
+  closingLine: "This isn't just code. It's the engine room your product runs on.", // shown in bold
+
+  // Shown with amber check icons on the About page and the home teaser.
+  values: ['Accuracy over hype', 'Tested before shipped', 'Built to scale', 'Clear communication'],
+
+  // The About teaser on the home page.
+  teaser: { heading: 'Meet the engineer behind TechyPabs.' },
 
   facts: [
     { value: 'Python', label: 'primary language' },
@@ -43,8 +51,7 @@ export const about = {
       },
       {
         title: 'A design trained eye',
-        // PLACEHOLDER
-        text: '[A line on your design background and how it shapes the products you build.]',
+        text: "I trained in Industrial Design, so I think about the person on the other side of the screen: clear flows, honest error messages and interfaces that don't make people guess.",
       },
     ],
   },
@@ -56,12 +63,8 @@ export const about = {
     projectNotes: {
       shopassist: 'An AI customer support product, live with a full test suite and API docs.',
     } as Record<string, string>,
-    entries: [
-      // PLACEHOLDER
-      { year: '[Year]', title: '[Milestone]', text: '[One line about it.]' },
-      // PLACEHOLDER
-      { year: '[Year]', title: '[Education]', text: '[School and course, if you want it shown.]' },
-    ] as TimelineEntry[],
+    // Other milestones, e.g. { year: 2024, title: 'Graduated', text: 'One line about it.' }
+    entries: [] as TimelineEntry[],
   },
 
   // The Credentials section stays hidden until this list has entries.

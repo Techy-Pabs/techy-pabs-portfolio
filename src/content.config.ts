@@ -101,19 +101,40 @@ const projects = defineCollection({
 
 const services = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
-  schema: z.strictObject({
-    title: z.string(),
-    order: z.number().int(),
-    summary: z.string(), // short card text; the Markdown body is the longer description
-    goodFor: z.array(z.string()).min(1),
-    deliverables: z.array(z.string()).min(1),
-    // Required: a service is only published once a shipped project proves it.
-    proof: z.strictObject({
-      project: reference('projects'), // build fails if no project has this slug
-      section: z.enum(caseStudySections),
-      label: z.string(),
-    }),
-  }),
+  // The Markdown body is the longer description on the /services overview.
+  schema: ({ image }) =>
+    z
+      .strictObject({
+        title: z.string(),
+        slug: kebabCase, // becomes the URL: /services/<slug>
+        order: z.number().int(), // lower numbers are listed first
+        shortName: z.string(), // contact form option, e.g. "AI chatbot"
+        summary: z.string(), // home page card text
+        tagline: z.string(), // one line for "Related services" cards
+        hero: z.strictObject({
+          headline: z.string(),
+          highlight: z.string(), // the words in the headline shown in amber
+          intro: z.string(),
+          cta: z.string(), // main button text, e.g. "Discuss your chatbot"
+          image: z.strictObject({ src: image(), alt: z.string().min(1) }),
+        }),
+        goodFor: z.array(z.string()).min(1),
+        deliverablesIntro: z.string(),
+        deliverables: z.array(z.strictObject({ title: z.string(), body: z.string() })).min(1),
+        // Required: a service is only published once a shipped project proves it.
+        proof: z.strictObject({
+          project: reference('projects'), // build fails if no project has this slug
+          section: z.enum(caseStudySections),
+          label: z.string(),
+        }),
+        faqTitle: z.string(),
+        faqs: z.array(z.strictObject({ question: z.string(), answer: z.string() })).min(1),
+        closing: z.string(), // heading of the amber call to action
+      })
+      .refine((s) => s.hero.headline.includes(s.hero.highlight), {
+        message: 'hero.highlight must be words copied exactly from hero.headline',
+        path: ['hero', 'highlight'],
+      }),
 });
 
 export const collections = { projects, services };

@@ -1,32 +1,119 @@
 ---
+import ArrowIcon from './ArrowIcon.astro';
+import Button from './Button.astro';
+import Logo from './Logo.astro';
+import { getServices, serviceHref } from '../lib/services';
+import { getCollection } from 'astro:content';
+import { newestFirst } from '../lib/projects';
 import { site } from '../site';
 
-// Links with no URL yet (LinkedIn, Upwork) are skipped until they are added to site.ts.
-const links = [
-  { label: 'GitHub', href: site.github },
-  { label: 'LinkedIn', href: site.linkedin },
-  { label: 'Upwork', href: site.upwork },
-].filter((link) => link.href);
+// Services and Work are built from the collections, so new entries appear here automatically.
+const services = await getServices();
+const projects = (await getCollection('projects')).sort(newestFirst);
+
+interface FooterLink {
+  label: string;
+  href: string;
+  external?: boolean;
+  muted?: boolean; // the "All ..." links
+}
+
+const columns: { heading: string; links: FooterLink[] }[] = [
+  {
+    heading: 'Services',
+    links: [
+      ...services.map((service) => ({ label: service.data.title, href: serviceHref(service.id) })),
+      { label: 'All services', href: '/services', muted: true },
+    ],
+  },
+  {
+    heading: 'Work',
+    links: [
+      ...projects.map((project) => ({ label: `${project.data.title}: ${project.data.kind}`, href: `/work/${project.id}` })),
+      { label: 'All projects', href: '/work', muted: true },
+    ],
+  },
+  {
+    heading: site.name,
+    links: [
+      { label: 'About Abraham', href: '/about' },
+      { label: 'How I work', href: '/services#process' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
+  {
+    heading: 'Connect',
+    // Links still waiting to be filled in (Upwork, LinkedIn) are left out.
+    links: [
+      { label: 'Upwork', href: site.upwork, external: true },
+      { label: 'GitHub', href: site.github, external: true },
+      { label: 'LinkedIn', href: site.linkedin, external: true },
+      { label: 'WhatsApp', href: site.whatsapp, external: true },
+      { label: 'Email', href: `mailto:${site.email}` },
+    ].filter((link) => link.href !== ''),
+  },
+];
 
 const year = new Date().getFullYear();
 ---
 
-<footer class="container-site flex flex-col gap-2 py-8 text-[15px] md:flex-row md:items-center md:justify-between">
-  <p class="text-text-muted">© {year} {site.name} · {site.owner}</p>
-  <ul class="flex gap-5">
-    {
-      links.map((link) => (
+<footer class="overflow-hidden border-t border-line">
+  <div class="container-site pt-16 md:pt-20">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,320px)_repeat(4,minmax(0,1fr))] lg:gap-10">
+      <div>
+        <Logo />
+        <p class="mt-5 leading-relaxed text-text-muted">{site.description}</p>
+        <Button href="/contact" arrow class="mt-7">Start a project</Button>
+      </div>
+
+      {
+        columns.map((column) => (
+          <nav aria-label={column.heading}>
+            <h2 class="font-pill text-[15px] font-normal tracking-label text-amber">{column.heading}</h2>
+            <ul class="mt-4">
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    {...(link.external && { target: '_blank', rel: 'me noopener' })}
+                    class:list={[
+                      'inline-flex min-h-11 items-center py-1 leading-snug transition-colors hover:text-amber',
+                      link.muted ? 'text-text-muted' : 'text-text-soft',
+                    ]}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div
+      class="mt-14 flex flex-col gap-3 border-t border-line pt-6 text-sm text-text-muted md:flex-row md:items-center md:justify-between"
+    >
+      <p>© {year} {site.name} · {site.owner} · {site.location}</p>
+      <ul class="flex gap-6">
         <li>
-          <a
-            href={link.href}
-            rel="me noopener"
-            target="_blank"
-            class="flex min-h-11 items-center text-text-soft underline underline-offset-4 transition-colors hover:text-amber"
-          >
-            {link.label}
+          <a href="/sitemap" class="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-amber">Sitemap</a>
+        </li>
+        <li>
+          <!-- "#top" always scrolls to the top of the page. -->
+          <a href="#top" class="inline-flex min-h-11 items-center gap-1 underline underline-offset-4 hover:text-amber">
+            Back to top <ArrowIcon class="-rotate-90" />
           </a>
         </li>
-      ))
-    }
-  </ul>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Decorative wordmark, cut off by the bottom of the page. Hidden from screen readers. -->
+  <p
+    aria-hidden="true"
+    class="mt-6 h-[0.62em] text-center text-[clamp(5.5rem,21vw,19rem)] leading-[0.8] font-bold tracking-heading whitespace-nowrap text-charcoal select-none"
+  >
+    techypabs
+  </p>
 </footer>

@@ -1,0 +1,35 @@
+---
+// A short list with an amber check icon before each item (an SVG, so it doesn't depend on fonts or emoji).
+// It switches to two columns only when its own box is at least 384 px wide (a container query),
+// so it never overflows a narrow column.
+interface Props {
+  items: string[];
+  tone?: 'dark' | 'light'; // the background the list sits on
+  class?: string;
+}
+
+const { items, tone = 'dark', class: className } = Astro.props;
+---
+
+<div class:list={['@container', className]}>
+  <ul class="grid gap-x-6 gap-y-3 @sm:grid-cols-2">
+    {
+      items.map((item) => (
+        <li class:list={['flex items-center gap-3 font-semibold', tone === 'dark' ? 'text-white' : 'text-charcoal']}>
+          <svg class="size-6 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="12" fill="var(--color-amber)" />
+            <path
+              d="m7 12.5 3.2 3.2L17 9"
+              fill="none"
+              stroke="var(--color-black)"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          {item}
+        </li>
+      ))
+    }
+  </ul>
+</div>

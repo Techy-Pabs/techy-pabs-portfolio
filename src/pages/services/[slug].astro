@@ -1,0 +1,52 @@
+---
+// One page per service, built from its file in src/content/services.
+import type { GetStaticPaths } from 'astro';
+import { getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import Faq from '../../components/Faq.astro';
+import RelatedServices from '../../components/services/RelatedServices.astro';
+import ServiceDeliverables from '../../components/services/ServiceDeliverables.astro';
+import ServiceHero from '../../components/services/ServiceHero.astro';
+import ServiceProof from '../../components/services/ServiceProof.astro';
+import { getServices } from '../../lib/services';
+
+export const getStaticPaths = (async () => {
+  const services = await getServices();
+  return services.map((service) => ({
+    params: { slug: service.id },
+    // Related services are simply all the others, in their usual order.
+    props: { service, related: services.filter((other) => other.id !== service.id) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { service, related } = Astro.props;
+const project = await getEntry(service.data.proof.project); // the schema guarantees it exists
+if (!project) throw new Error(`Proof project missing for ${service.id}`);
+---
+
+<BaseLayout
+  title={`${service.data.title} services`}
+  description={`${service.data.title} by Abraham Bassey: ${service.data.summary}`}
+>
+  <ServiceHero service={service} project={project} />
+  <ServiceDeliverables service={service} />
+  <ServiceProof service={service} project={project} />
+
+  <section class="bg-black pb-20">
+    <div class="container-site">
+      <div class="mx-auto max-w-[900px]">
+        <h2 class="text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05]">{service.data.faqTitle}</h2>
+        <Faq items={service.data.faqs} class="mt-8" />
+      </div>
+    </div>
+  </section>
+
+  <RelatedServices services={related} />
+
+  <section class="bg-black py-24 md:py-28">
+    <div class="container-site">
+      <CtaBlock heading={service.data.closing} />
+    </div>
+  </section>
+</BaseLayout>

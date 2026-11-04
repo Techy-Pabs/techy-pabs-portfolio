@@ -3,7 +3,7 @@ import portraitAbout from './assets/portraits/portrait-about.webp';
 import portraitHero from './assets/portraits/portrait-hero.webp';
 
 export const site = {
-  name: 'Techy Pabs',
+  name: 'TechyPabs',
   owner: 'Abraham Bassey',
   email: 'basseyabraham988@gmail.com',
   whatsapp: 'https://wa.me/2347084361745',
@@ -14,11 +14,10 @@ export const site = {
   location: 'Lagos, Nigeria',
   city: 'Lagos',
   timezone: 'WAT (UTC+1)',
-  // DRAFT for Abraham to confirm.
-  replyTime: 'I usually reply within one working day.',
-  // Placeholder until Abraham supplies his own words.
-  bioShort:
-    "[Two or three sentences in your own words: where you're based, what you build, and why you care about software that works the first time.]",
+  replyTime: 'I usually reply within minutes during working hours (WAT).',
+  // Shown in the footer on every page.
+  description:
+    'TechyPabs is the studio of Abraham Bassey, an AI backend engineer in Lagos, Nigeria, building backend systems and AI features for businesses worldwide.',
 } as const;
 
 export const navLinks = [
@@ -47,7 +46,5 @@ export const contactChannels = [
   { kind: 'Email', label: 'Email me', detail: site.email, href: `mailto:${site.email}`, external: false },
 ].filter((channel) => channel.href !== '');
 
-// Contact form choices.
-export const projectTypes = ['AI assistant or RAG', 'API or backend', 'LLM integration', 'Not sure yet'];
-// DRAFT budget ranges for Abraham to confirm.
+// Contact form budget choices. (The "What do you need?" options come from the services collection.)
 export const budgetRanges = ['Under $500', '$500 to $1,500', '$1,500 to $5,000', '$5,000+', 'Not sure yet'];

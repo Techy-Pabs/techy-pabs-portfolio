@@ -1,0 +1,30 @@
+---
+// Questions and answers that open and close. <details>/<summary> is built into the browser,
+// so it works with a mouse, keyboard and screen readers, without JavaScript. The first one starts open.
+interface Props {
+  items: { question: string; answer: string }[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<div class:list={['border-t border-line', className]}>
+  {
+    items.map((item, i) => (
+      <details class="group border-b border-line" open={i === 0}>
+        <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-6 py-6 text-lg font-semibold [&::-webkit-details-marker]:hidden">
+          {item.question}
+          <svg
+            class="size-5 shrink-0 text-amber transition-transform duration-300 group-open:rotate-45"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </summary>
+        <p class="-mt-1 max-w-3xl pb-6 leading-relaxed text-text-muted">{item.answer}</p>
+      </details>
+    ))
+  }
+</div>

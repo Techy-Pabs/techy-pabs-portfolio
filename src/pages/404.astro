@@ -5,7 +5,11 @@ import Pill from '../components/Pill.astro';
 ---
 
 <!-- Astro builds this as 404.html, which Vercel shows for any address that doesn't exist. -->
-<BaseLayout title="Page not found" description="This page doesn't exist on the Techy Pabs site." bodyClass="bg-hero">
+<BaseLayout
+  title="Page not found"
+  description="Page not found: this address doesn't exist on the TechyPabs site. Head back home or see the work."
+  bodyClass="bg-hero"
+>
   <section class="pt-40 pb-28 md:pt-48 md:pb-36">
     <div class="container-site">
       <Pill>404</Pill>

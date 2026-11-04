@@ -1,6 +1,6 @@
-# Techy Pabs portfolio site: build spec
+# TechyPabs portfolio site: build spec
 
-The personal portfolio of Abraham Bassey, an AI backend engineer, under the brand Techy Pabs. It shows every project he ships, now and in future, and turns visitors into client enquiries.
+The personal portfolio of Abraham Bassey, an AI backend engineer, under the brand TechyPabs. It shows every project he ships, now and in future, and turns visitors into client enquiries.
 
 The approved mockups are in `design/mockups/` (desktop at 1440 px wide and phone at 390 px wide for each page). Build to match them. Images are in `src/assets/` (`portraits/` and `projects/<slug>/`), so Astro can optimise them.
 
@@ -44,14 +44,17 @@ Layout: content max width 1240 px with 24 px side padding. Cards 24 to 36 px rad
 
 ## Pages
 
-All pages share the nav (logo "tp" tile plus "Techy Pabs"; links Work, Services, About, Contact, with the current page highlighted in amber; "Start a project" outline button) and the footer (copyright, GitHub, LinkedIn, Upwork).
+All pages share the nav (logo "tp" tile plus "TechyPabs"; links Work, Services, About, Contact, with the current page highlighted in amber; "Start a project" outline button) and the fat footer (`footer-*.jpg` mockups): the logo, the studio description from `site.ts` and a "Start a project" button; four link columns, Services and Work built from the collections (plus "All services" and "All projects"), TechyPabs (About Abraham, How I work, Contact) and Connect (Upwork, GitHub, LinkedIn, WhatsApp, Email, with empty links hidden); a bottom row with the copyright and location, Sitemap and Back to top; and a large "techypabs" wordmark cut off by the page edge, hidden from screen readers.
+
+Every page has a unique title and meta description that includes its main search phrase.
 
 1. **Home** (`/`): hero with headline "AI backend engineer for products that need to actually work.", the cutout portrait rising above an amber block, a typing terminal card and a "Latest ship" tag (both from the most recently shipped project); a light scrolling capabilities strip with a pause/play button; "What I build" services from the services collection; "Selected work" showing featured projects; a short About teaser with the second portrait; an amber contact block with Upwork, WhatsApp and email.
 2. **Work** (`/work`): "All work." with automatic counts (shipped, live demos); filter buttons All, AI, Backend, Client work (from project tags) with an honest empty state; one large row per project linking to its case study.
 3. **Case study** (`/work/[slug]`): one template for every project. Title, summary, role, timeline, core stack, Live demo and Code buttons; hero screenshot on an amber panel; The problem; Three parts, one system (or however many parts the project has); Under the hood with a step diagram and key decisions; Quality numbers; Results and next steps; closing call to action; "All work" and GitHub links.
-4. **Services** (`/services`): one block per service from the services collection, each with "Good for", "What you get" and a link to the project that proves it; a four step process; the tech stack; an FAQ; a call to action.
-5. **About** (`/about`): "Hi, I'm Abraham." with portrait; quick facts strip; What I bring; a journey timeline; credentials (hidden until there are entries); call to action.
-6. **Contact** (`/contact`): direct channels (Upwork, WhatsApp, email) and a project form (name, email, what you need, budget, message). The form posts to a small FastAPI endpoint built later; until then it can use a mailto fallback.
+4. **Services** (`/services`): hero; one block per service from the services collection, each with "Good for", "What you get" and a link to its own service page; a four step process (`#process`, the footer's "How I work"); the tech stack; an FAQ; a call to action. The page text lives in `src/data/services-page.ts`.
+4a. **Service page** (`/services/[slug]`, `service-page-*.jpg` mockups): one template for every service. Breadcrumb, hero with headline, intro, CTA, a "See [project]" button and the service's hero image on an amber panel; What you get with Good for tags and deliverable cards; the proof card linking to the proving project's section; the service's FAQ; related services (all the others, automatically); closing call to action.
+5. **About** (`/about`): "Hi, I'm Abraham." with portrait, three paragraphs and four value points with amber check icons; quick facts strip; What I bring; a journey timeline (shipped projects added automatically, plus any real milestones); credentials (hidden until there are entries); call to action. All About text, including the home teaser's ("Meet the engineer behind TechyPabs.", paragraph 1, the value points and "Work with me"), lives in `src/data/about.ts`.
+6. **Contact** (`/contact`): direct channels (Upwork, WhatsApp, email) and a project form (name, email, what you need, budget, message). "What you need" has one option per service (its `shortName`) plus "Not sure yet", so new services appear automatically. The form posts to a small FastAPI endpoint built later; until then it can use a mailto fallback.
 7. **404** page in the same style.
 
 ## Content model
@@ -62,11 +65,11 @@ Two more project fields: `shipped` is the required ship date, written unquoted a
 
 Every image (the cover and each part's image) is written as `{ src, alt }`: `src` is a path into `src/assets/` and `alt` is required, non-empty alt text.
 
-Services (`src/content/services/*.md`): title, order, summary (short card text), goodFor, deliverables, proof (project, section, label). The Markdown body is the longer description on the Services page. `proof.project` must be the slug of an existing project, and `proof.section` must be one of the case study section anchors: `problem`, `parts`, `under-the-hood`, `quality` or `results`. A service is published only once a shipped project proves it.
+Services (`src/content/services/*.md`): title, slug (the URL `/services/<slug>`), order, shortName (the contact form option), summary (home card text), tagline (related services cards), hero (headline, highlight, intro, cta, image as `{ src, alt }`; highlight must be words copied exactly from the headline), goodFor (tags), deliverablesIntro, deliverables (title, body), proof (project, section, label), faqTitle, faqs (question, answer), closing (call to action heading). The Markdown body is the longer description on the Services overview. Service text must only claim what the proving project shows. `proof.project` must be the slug of an existing project, and `proof.section` must be one of the case study section anchors: `problem`, `parts`, `under-the-hood`, `quality` or `results`. A service is published only once a shipped project proves it.
 
 The schemas are strict: unknown fields, missing images, bad URLs or a proof that points to a missing project fail the build.
 
-Site settings (`src/site.ts`): name, email basseyabraham988@gmail.com, WhatsApp link https://wa.me/2347084361745, GitHub https://github.com/Techy-Pabs, LinkedIn and Upwork (to be supplied).
+Site settings (`src/site.ts`): name, email basseyabraham988@gmail.com, WhatsApp link https://wa.me/2347084361745, GitHub https://github.com/Techy-Pabs, LinkedIn and Upwork (to be supplied), location and time zone, the footer description, the reply time ("I usually reply within minutes during working hours (WAT).") and the budget ranges (Under $500, $500 to $1,500, $1,500 to $5,000, $5,000+, Not sure yet).
 
 The first project entry is ShopAssist: timeline 3 weeks, October to November 2026; live demo https://shopassist-five.vercel.app; API docs https://shopassist-022b.onrender.com/docs; code https://github.com/Techy-Pabs/shopassist; quality 350+ backend tests, 450+ frontend tests, a 24 question answer quality check, live on Render, Neon and Vercel.
 
@@ -82,4 +85,4 @@ Lighthouse 95 or higher for performance, accessibility, best practices and SEO; 
 
 ## Still to come from Abraham
 
-Bio and story text, education, certifications, logo, LinkedIn and Upwork links, FAQ answers, budget ranges, reply time, a CV file, and the domain name.
+Education and other journey milestones, certifications, logo, LinkedIn and Upwork links, a CV file, and the domain name.

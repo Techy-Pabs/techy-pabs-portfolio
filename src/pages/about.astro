@@ -14,15 +14,15 @@ const cvUrl = Object.values(cvFiles)[0];
 ---
 
 <BaseLayout
-  title="About"
-  description="Abraham Bassey is an AI backend engineer in Lagos building APIs, databases and AI pipelines for products that need to work."
+  title="About Abraham Bassey, AI backend engineer in Lagos"
+  description="About Abraham Bassey, AI backend engineer in Lagos, Nigeria and founder of TechyPabs, building APIs, databases and AI features that are tested and built to scale."
 >
   <AboutHero cvUrl={cvUrl} />
   <FactsStrip />
   <WhatIBring />
   <Journey />
   {about.credentials.length > 0 && <Credentials />}
-  <section class="bg-black pt-24 pb-2 md:pt-28 md:pb-1">
+  <section class="bg-black py-24 md:py-28">
     <div class="container-site">
       <CtaBlock heading={about.closing} buttonLabel="Get in touch" />
     </div>
