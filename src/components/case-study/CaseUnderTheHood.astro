@@ -69,9 +69,10 @@ const lastIndex = diagram.steps.length - 1;
   import { whenNear } from '../../lib/motion';
 
   for (const diagram of document.querySelectorAll<HTMLElement>('[data-diagram]')) {
-    whenNear(diagram, ({ gsap, CLEAR }) => {
+    // Draws again each time the diagram scrolls back into view (see replayOnView in src/lib/gsap.ts).
+    whenNear(diagram, ({ gsap, CLEAR, replayOnView }, visible) => {
       // Each step box appears, then the arrow to the next one, in order.
-      const timeline = gsap.timeline({ scrollTrigger: { trigger: diagram, start: 'top 75%', once: true } });
+      const timeline = gsap.timeline();
       for (const step of diagram.children) {
         const box = step.firstElementChild;
         const arrow = step.querySelector(':scope > svg');
@@ -80,6 +81,7 @@ const lastIndex = diagram.steps.length - 1;
           timeline.from(arrow, { opacity: 0, scale: 0, duration: 0.25, ease: 'power2.out', clearProps: CLEAR }, '-=0.1');
         }
       }
+      replayOnView(diagram, timeline, visible);
     });
   }
 </script>

@@ -28,7 +28,8 @@ export const site = {
 } as const;
 
 export const navLinks = [
-  { label: 'Work', href: '/work' },
+  { label: 'Home', href: '/' },
+  { label: 'Portfolio', href: '/portfolio' },
   { label: 'Services', href: '/services' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },

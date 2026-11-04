@@ -1,0 +1,37 @@
+---
+// A smaller featured project card for the two-column grid under the large card on the home page.
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import ProjectLinks from '../ProjectLinks.astro';
+import { coverTransition } from '../../lib/projects';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  backdrop: 'amber' | 'light'; // the panel behind the screenshot alternates between cards
+}
+
+const { project, backdrop } = Astro.props;
+const { title, summary, kind, year, cover } = project.data;
+---
+
+<article class="group relative flex h-full flex-col overflow-hidden rounded-card-lg border border-line bg-charcoal">
+  <div class:list={['h-[280px] overflow-hidden px-7 pt-7 md:h-[316px]', backdrop === 'amber' ? 'bg-amber' : 'bg-light']}>
+    <Image
+      src={cover.src}
+      alt={cover.alt}
+      widths={[560, 1100]}
+      sizes="(min-width: 1024px) 560px, calc(100vw - 104px)"
+      style={coverTransition(project.id)}
+      class="h-full w-full rounded-t-xl object-cover object-left-top shadow-xl shadow-black/20 transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
+    />
+  </div>
+  <div class="flex flex-1 flex-col p-7">
+    <p class="font-mono text-[13px] tracking-widest text-text-muted uppercase">{kind} · {year}</p>
+    <h3 class="mt-3 text-[28px] leading-tight">
+      <!-- Stretched over the whole card, so anywhere outside the buttons opens the case study. -->
+      <a href={`/portfolio/${project.id}`} class="after:absolute after:inset-0 group-hover:text-amber">{title}</a>
+    </h3>
+    <p class="mt-3 leading-relaxed text-text-muted">{summary}</p>
+    <ProjectLinks project={project} size="sm" class="mt-auto pt-6" />
+  </div>
+</article>

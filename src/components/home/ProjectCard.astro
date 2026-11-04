@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import ProjectLinks from '../ProjectLinks.astro';
 import { coverTransition } from '../../lib/projects';
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, summary, kind, year, stack, cover, parts } = project.data;
+const { title, summary, kind, year, cover, parts } = project.data;
 
 // The cover sits in the middle. The screens either side are the project's landscape part
 // screenshots (a tall phone-shaped shot, like a chat panel, does not suit the fan).
@@ -54,20 +55,14 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
 
   <div class="grid gap-6 p-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
     <div>
-      <p class="font-mono text-[13px] tracking-widest text-text-muted uppercase">{kind} · {year}</p>
+      <p class="font-mono text-[13px] tracking-widest text-text-muted uppercase">Latest · {kind} · {year}</p>
       <h3 class="mt-3 text-[clamp(2.25rem,3vw,2.5rem)] leading-tight">
         <!-- The link's ::after covers the whole card, so anywhere on it opens the case study. -->
-        <a href={`/work/${project.id}`} class="after:absolute after:inset-0 group-hover:text-amber">{title}</a>
+        <a href={`/portfolio/${project.id}`} class="after:absolute after:inset-0 group-hover:text-amber">{title}</a>
       </h3>
       <p class="mt-3 max-w-xl text-lg leading-relaxed text-text-muted">{summary}</p>
     </div>
-    <ul class="flex max-w-60 flex-wrap gap-2 md:justify-end" aria-label="Stack">
-      {
-        stack.map((item) => (
-          <li class="rounded-full border border-line px-3.5 py-1.5 font-mono text-[13px] text-text-soft">{item}</li>
-        ))
-      }
-    </ul>
+    <ProjectLinks project={project} class="max-w-[19rem] md:justify-end" />
   </div>
 </article>
 
@@ -75,7 +70,8 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
   import { whenNear } from '../../lib/motion';
 
   for (const fan of document.querySelectorAll<HTMLElement>('[data-fan]')) {
-    whenNear(fan, ({ gsap, CLEAR }) => {
+    whenNear(fan, ({ gsap, CLEAR }, visible) => {
+      if (visible) return; // plays once, and only if it hasn't been seen yet
       const sides = fan.querySelectorAll<HTMLElement>('[data-fan-side]');
       gsap.from(sides, {
         // Start pulled in behind the cover and straight, then fan out to their CSS positions and tilts.

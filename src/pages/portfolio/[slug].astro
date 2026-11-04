@@ -32,7 +32,7 @@ const socialImage = await getImage({ src: project.data.cover.src, width: 1200, h
   description={`${project.data.title} case study: ${project.data.summary}`}
   image={{ src: socialImage.src, alt: project.data.cover.alt }}
   ogType="article"
-  jsonLd={[breadcrumbs(['Work', '/work/'], [project.data.title, `/work/${project.id}/`])]}
+  jsonLd={[breadcrumbs(['Portfolio', '/portfolio/'], [project.data.title, `/portfolio/${project.id}/`])]}
 >
   <CaseHero project={project} />
   <CaseProblem project={project} />

@@ -8,6 +8,7 @@ const copies = [false, true];
 <section aria-label="Capabilities" class="group relative overflow-hidden bg-light py-5 text-charcoal md:py-6" data-strip>
   <div
     class="flex w-max motion-safe:animate-marquee group-data-paused:[animation-play-state:paused] hover:[animation-play-state:paused]"
+    data-strip-track
   >
     {
       copies.map((isDuplicate) => (
@@ -58,3 +59,15 @@ const copies = [false, true];
     });
   }
 </script>
+
+<style>
+  /*
+    Below 760 px the strip scrolls about twice as fast (22.5 s per loop instead of 45 s).
+    Only the duration changes, so pausing and reduced motion still work exactly as on desktop.
+  */
+  @media (width < 47.5rem) {
+    [data-strip-track] {
+      animation-duration: 22.5s;
+    }
+  }
+</style>

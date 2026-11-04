@@ -1,5 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/work", "destination": "/portfolio", "permanent": true },
+    { "source": "/work/:path*", "destination": "/portfolio/:path*", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",

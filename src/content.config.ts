@@ -10,7 +10,7 @@ import { z } from 'astro/zod';
 
 const kebabCase = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'Use lowercase words joined by hyphens');
 
-// The case study sections a service can link to as proof (the ids on /work/[slug]).
+// The case study sections a service can link to as proof (the ids on /portfolio/[slug]).
 export const caseStudySections = ['problem', 'parts', 'under-the-hood', 'quality', 'results'] as const;
 
 const projects = defineCollection({
@@ -23,7 +23,7 @@ const projects = defineCollection({
       .strictObject({
         title: z.string(),
         titleHighlight: z.string().optional(), // part of the title shown in amber on the case study
-        slug: kebabCase, // becomes the URL: /work/<slug>
+        slug: kebabCase, // becomes the URL: /portfolio/<slug>
         summary: z.string(),
         kind: z.string(), // e.g. "AI customer support"
         year: z.number().int().min(2000),

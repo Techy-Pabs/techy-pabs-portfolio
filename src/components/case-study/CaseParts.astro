@@ -73,16 +73,17 @@ const backdrops = ['bg-amber', 'bg-light', 'bg-black'];
   import { whenNear } from '../../lib/motion';
 
   for (const list of document.querySelectorAll<HTMLElement>('[data-reveal]')) {
-    whenNear(list, ({ gsap, CLEAR }) => {
-      gsap.from(list.children, {
+    // Replays each time the cards scroll back into view (see replayOnView in src/lib/gsap.ts).
+    whenNear(list, ({ gsap, CLEAR, replayOnView }, visible) => {
+      const reveal = gsap.from(list.children, {
         y: 48,
         opacity: 0,
         duration: 0.8,
         ease: 'power3.out',
         stagger: 0.18, // one after another
         clearProps: CLEAR,
-        scrollTrigger: { trigger: list, start: 'top 80%', once: true },
       });
+      replayOnView(list, reveal, visible);
     });
   }
 </script>

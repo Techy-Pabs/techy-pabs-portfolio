@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import ProjectLinks from '../ProjectLinks.astro';
+import { coverTransition } from '../../lib/projects';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  number: number;
+}
+
+const { project, number } = Astro.props;
+const { title, summary, kind, year, tags, cover } = project.data;
+---
+
+<!-- data-tags is what the filter buttons match against. -->
+<li data-tags={tags.join(' ')} class="group relative border-t border-line py-10 md:py-12">
+  <article
+    class="grid gap-6 md:grid-cols-[minmax(0,300px)_minmax(0,1fr)] md:gap-8 lg:grid-cols-[48px_minmax(0,340px)_minmax(0,1fr)] lg:items-center"
+  >
+    <!-- Below 1024 px the number sits on its own line above; on wider screens it is the first column. -->
+    <p class="font-mono text-sm text-amber md:col-span-2 lg:col-span-1">{String(number).padStart(2, '0')}</p>
+
+    <div class="self-start rounded-card bg-amber p-4 md:p-5 lg:self-center">
+      <Image
+        src={cover.src}
+        alt={cover.alt}
+        widths={[480, 920]}
+        sizes="(min-width: 1024px) 340px, (min-width: 760px) 300px, calc(100vw - 48px)"
+        style={coverTransition(project.id)}
+        class="block h-auto w-full rounded-lg transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
+      />
+    </div>
+
+    <div>
+      <p class="font-mono text-[13px] tracking-widest text-text-muted uppercase">{kind} · {year}</p>
+      <h2 class="mt-3 text-[clamp(2rem,3.4vw,2.75rem)] leading-tight">
+        <!-- The link's ::after covers the whole row, so anywhere outside the buttons opens the case study. -->
+        <a href={`/portfolio/${project.id}`} class="transition-colors after:absolute after:inset-0 group-hover:text-amber">
+          {title}
+        </a>
+      </h2>
+      <p class="mt-3 max-w-xl text-lg leading-relaxed text-text-muted">{summary}</p>
+      <ProjectLinks project={project} size="sm" class="mt-6" />
+    </div>
+  </article>
+</li>

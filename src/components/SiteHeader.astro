@@ -3,7 +3,7 @@ import ArrowIcon from './ArrowIcon.astro';
 import Logo from './Logo.astro';
 import { navLinks, site } from '../site';
 
-// "/work/shopassist/" -> "/work/shopassist", so Work stays highlighted on case studies.
+// "/portfolio/shopassist/" -> "/portfolio/shopassist", so Portfolio stays highlighted on case studies.
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
 
@@ -20,7 +20,7 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
 
 <header class="absolute inset-x-0 top-0 z-30">
   <div class="container-site flex items-center justify-between gap-6 py-6 md:grid md:grid-cols-[1fr_auto_1fr]">
-    <Logo />
+    <Logo compactOnTablet />
 
     <!-- Desktop: links in an outlined pill, centred on the page. -->
     <nav aria-label="Main" class="hidden md:block">
@@ -49,7 +49,7 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
         <a
           href={cta.href}
           {...ctaTarget}
-          class="hidden min-h-11 items-center justify-self-end rounded-full border border-amber px-5 font-button text-[15px] font-medium tracking-label text-amber transition-colors hover:bg-amber hover:text-black md:inline-flex"
+          class="hidden min-h-11 items-center justify-self-end rounded-full whitespace-nowrap border border-amber px-5 font-button text-[15px] font-medium tracking-label text-amber transition-colors hover:bg-amber hover:text-black md:inline-flex"
         >
           {cta.label}
         </a>
@@ -88,7 +88,7 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
         <Logo />
         <button
           type="button"
-          class="grid size-12 place-items-center rounded-full border border-amber text-amber"
+          class="grid size-12 place-items-center rounded-full bg-amber text-black"
           aria-label="Close menu"
           autofocus
           data-menu-close
@@ -99,8 +99,8 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
         </button>
       </div>
 
-      <nav aria-label="Menu" class="mt-12">
-        <ul>
+      <nav aria-label="Menu" class="mt-10">
+        <ul class="border-t border-line">
           {
             navLinks.map((link) => (
               <li class="border-b border-line">
@@ -108,11 +108,12 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
                   href={link.href}
                   aria-current={isCurrent(link.href) ? 'page' : undefined}
                   class:list={[
-                    'flex min-h-11 items-center py-4 text-4xl font-bold tracking-heading',
+                    'flex min-h-11 items-center justify-between gap-4 py-4 text-[32px] leading-tight font-bold tracking-heading',
                     isCurrent(link.href) ? 'text-amber' : 'text-white',
                   ]}
                 >
                   {link.label}
+                  <ArrowIcon class:list={['text-xl', !isCurrent(link.href) && 'text-text-muted']} />
                 </a>
               </li>
             ))
@@ -125,7 +126,7 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
           <a
             href={cta.href}
             {...ctaTarget}
-            class="mt-auto flex min-h-12 items-center justify-center gap-2 rounded-full bg-button-primary font-button text-base font-medium tracking-label text-black"
+            class="mt-6 flex min-h-12 items-center justify-center gap-2 rounded-full bg-button-primary font-button text-base font-medium tracking-label text-black"
           >
             {cta.label} <ArrowIcon />
           </a>

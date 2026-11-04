@@ -50,7 +50,7 @@ const terminalStart = headline.length * wordDelay + 400; // terminal starts once
 
       <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row">
         <Button href="/contact" arrow>Start a project</Button>
-        <Button href="/work" variant="outline">See my work</Button>
+        <Button href="/portfolio" variant="outline">See my work</Button>
       </div>
 
       <ul class="mt-12 flex flex-wrap gap-x-7 gap-y-4 font-mono text-[13px] tracking-wide text-text-muted uppercase">
@@ -104,7 +104,7 @@ const terminalStart = headline.length * wordDelay + 400; // terminal starts once
         latest && (
           // Sits to the right of the head; hidden on phones, where there is no room beside the face.
           <a
-            href={`/work/${latest.id}`}
+            href={`/portfolio/${latest.id}`}
             class="absolute top-[-1%] -right-[6%] hidden rounded-xl border border-line bg-charcoal/85 px-4 py-2.5 shadow-xl shadow-black/50 backdrop-blur transition-colors hover:border-amber md:block"
           >
             <span class="block font-mono text-[10px] tracking-widest text-text-muted uppercase">Latest ship</span>

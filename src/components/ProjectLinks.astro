@@ -1,0 +1,61 @@
+---
+/*
+  A project's buttons: Live demo, Code and Case study. Live demo and Code only appear when the
+  project has those links, so a private client project shows no Code button.
+
+  They sit inside cards whose title link is stretched over the whole card (an ::after overlay),
+  so clicking anywhere else opens the case study. `relative z-10` lifts the buttons above that
+  overlay: they stay clickable and keyboard reachable, and no link is nested inside another.
+*/
+import type { CollectionEntry } from 'astro:content';
+import ArrowIcon from './ArrowIcon.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  size?: 'md' | 'sm';
+  class?: string;
+}
+
+const { project, size = 'md', class: className } = Astro.props;
+const { links, title } = project.data;
+
+const base = [
+  'relative z-10 inline-flex items-center gap-2 rounded-full font-button font-medium tracking-label transition-colors',
+  size === 'md' ? 'min-h-12 px-5 text-[15px]' : 'min-h-11 px-4 text-sm',
+];
+const outline = 'border border-text-soft/40 text-white hover:border-white';
+const external = { target: '_blank', rel: 'noopener' };
+---
+
+<ul class:list={['flex flex-wrap gap-2.5', className]} aria-label={`${title} links`}>
+  {
+    links.live && (
+      <li>
+        <a href={links.live} {...external} class:list={[base, 'bg-amber text-black hover:bg-light']}>
+          Live demo
+          <ArrowIcon direction="up-right" />
+          <span class="sr-only">{` of ${title} (opens in a new tab)`}</span>
+        </a>
+      </li>
+    )
+  }
+  {
+    links.code && (
+      <li>
+        <a href={links.code} {...external} class:list={[base, outline]}>
+          <svg class="size-[1.1em] shrink-0" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+          </svg>
+          Code
+          <span class="sr-only">{` for ${title} on GitHub (opens in a new tab)`}</span>
+        </a>
+      </li>
+    )
+  }
+  <li>
+    <a href={`/portfolio/${project.id}`} class:list={[base, outline]}>
+      Case study<span class="sr-only">: {title}</span>
+      <ArrowIcon />
+    </a>
+  </li>
+</ul>

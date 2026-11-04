@@ -2,8 +2,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaBlock from '../../components/CtaBlock.astro';
-import WorkHero from '../../components/work/WorkHero.astro';
-import WorkList from '../../components/work/WorkList.astro';
+import WorkHero from '../../components/portfolio/WorkHero.astro';
+import WorkList from '../../components/portfolio/WorkList.astro';
 import { newestFirst } from '../../lib/projects';
 
 const projects = (await getCollection('projects')).sort(newestFirst);

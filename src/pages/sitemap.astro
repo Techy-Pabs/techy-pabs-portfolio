@@ -14,14 +14,14 @@ const groups = [
     heading: 'Pages',
     links: [
       { label: 'Home', href: '/' },
-      { label: 'Work', href: '/work' },
+      { label: 'Portfolio', href: '/portfolio' },
       { label: 'Services', href: '/services' },
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
     ],
   },
   { heading: 'Services', links: services.map((s) => ({ label: s.data.title, href: serviceHref(s.id) })) },
-  { heading: 'Case studies', links: projects.map((p) => ({ label: p.data.title, href: `/work/${p.id}` })) },
+  { heading: 'Case studies', links: projects.map((p) => ({ label: p.data.title, href: `/portfolio/${p.id}` })) },
 ];
 ---
 

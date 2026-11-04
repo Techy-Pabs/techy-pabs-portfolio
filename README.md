@@ -26,7 +26,7 @@ Stop the dev server with `Ctrl + C`.
 ```text
 design/                   spec and mockups (not part of the built site)
 public/                   files served as-is: icons and the default social preview image
-vercel.json               security headers Vercel sends with every page
+vercel.json               security headers, and redirects from the old /work addresses to /portfolio
 src/
   assets/                 images Astro optimises: portraits and project screenshots
   content/                projects and services as Markdown files
@@ -37,7 +37,8 @@ src/
   layouts/BaseLayout.astro  the HTML shell every page uses: fonts, SEO tags, header, footer
   lib/                    small helpers: structured data, motion, text, services, projects
   components/             the building blocks of each page
-  pages/                  one file per URL: index.astro is "/"; robots.txt.ts builds /robots.txt
+  pages/                  one file per URL: index.astro is "/", portfolio/ holds the Portfolio page
+                          and the case studies (/portfolio/<slug>); robots.txt.ts builds /robots.txt
 ```
 
 ## Design tokens

@@ -3,14 +3,16 @@ import { getCollection } from 'astro:content';
 import Button from '../Button.astro';
 import Pill from '../Pill.astro';
 import ProjectCard from './ProjectCard.astro';
+import ProjectGridCard from './ProjectGridCard.astro';
+import { newestFirst } from '../../lib/projects';
 
-const featured = (await getCollection('projects', (project) => project.data.featured)).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+// Up to four featured projects: the newest shipped one as the large card, the rest in a grid below.
+const featured = (await getCollection('projects', (project) => project.data.featured)).sort(newestFirst).slice(0, 4);
+const [latest, ...others] = featured;
 ---
 
 {
-  featured.length > 0 && (
+  latest && (
     <section class="bg-black py-24 md:py-28">
       <div class="container-site">
         <div class="flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
@@ -20,15 +22,18 @@ const featured = (await getCollection('projects', (project) => project.data.feat
               Shipped, live, <span class="text-amber">documented.</span>
             </h2>
           </div>
-          <Button href="/work" variant="amber" arrow>
+          <Button href="/portfolio" variant="amber" arrow>
             All projects
           </Button>
         </div>
 
-        <ul class="mt-10 space-y-8">
-          {featured.map((project) => (
+        <ul class="mt-10 grid gap-4 md:grid-cols-2">
+          <li class="md:col-span-2">
+            <ProjectCard project={latest} />
+          </li>
+          {others.map((project, i) => (
             <li>
-              <ProjectCard project={project} />
+              <ProjectGridCard project={project} backdrop={i % 2 === 0 ? 'amber' : 'light'} />
             </li>
           ))}
         </ul>

@@ -11,7 +11,7 @@ const projectEntries: Row[] = projects.map((project) => ({
   year: project.data.shipped.getFullYear(),
   title: `Shipped ${project.data.title}`,
   text: about.journey.projectNotes[project.id] ?? project.data.summary,
-  href: `/work/${project.id}`,
+  href: `/portfolio/${project.id}`,
 }));
 
 // Newest year first; entries without a real year yet (placeholders) keep their order at the end.
