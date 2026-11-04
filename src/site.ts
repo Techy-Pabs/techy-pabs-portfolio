@@ -1,4 +1,4 @@
-// Site-wide settings. Change a link here and it updates everywhere it is used.
+﻿// Site-wide settings. Change a link here and it updates everywhere it is used.
 import portraitAbout from './assets/portraits/portrait-about.webp';
 import portraitHero from './assets/portraits/portrait-hero.webp';
 
@@ -6,6 +6,9 @@ export const site = {
   name: 'TechyPabs',
   // The live address. Keep this the same as `site` in astro.config.mjs.
   url: 'https://techy-pabs-portfolio.vercel.app',
+  // Google Search Console: paste the code from the "HTML tag" method (only the content="..." value).
+  // The tag is added to every page once this holds a real code.
+  googleSiteVerification: 'PASTE_CODE_HERE',
   owner: 'Abraham Bassey',
   email: 'basseyabraham988@gmail.com',
   whatsapp: 'https://wa.me/2347084361745',

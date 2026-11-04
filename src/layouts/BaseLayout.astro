@@ -42,6 +42,10 @@ const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.ur
 const canonical = new URL(path, Astro.site).href;
 const imageUrl = new URL(image.src, Astro.site).href;
 
+// Google Search Console code from site.ts; left out while it is empty or still the placeholder.
+const verificationCode: string = site.googleSiteVerification;
+const googleVerification = verificationCode && verificationCode !== 'PASTE_CODE_HERE' ? verificationCode : null;
+
 // "<" is escaped so text inside the data can never close the <script> tag early.
 const toJson = (data: Record<string, unknown>) => JSON.stringify(data).replace(/</g, '\\u003c');
 ---
@@ -60,6 +64,7 @@ const toJson = (data: Record<string, unknown>) => JSON.stringify(data).replace(/
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
 
     <!-- How the page looks when shared (Open Graph is used by most apps; Twitter/X reads its own tags). -->
     <meta property="og:type" content={ogType} />
