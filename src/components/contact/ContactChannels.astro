@@ -1,12 +1,18 @@
 ---
 // The direct ways to get in touch, from site.ts. Upwork appears once its link is filled in.
+// Messages come first; the call option is last and only shown here, on the Contact page.
 import ArrowIcon from '../ArrowIcon.astro';
-import { contactChannels } from '../../site';
+import { contactChannels, site } from '../../site';
+
+const channels = [
+  ...contactChannels,
+  { kind: 'Prefer a call?', detail: 'Book a quick call', href: site.callLink, external: true },
+];
 ---
 
 <ul class="space-y-2.5" aria-label="Contact me directly">
   {
-    contactChannels.map((channel) => (
+    channels.map((channel) => (
       <li>
         <a
           href={channel.href}

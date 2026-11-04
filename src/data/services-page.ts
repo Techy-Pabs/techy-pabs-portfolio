@@ -66,7 +66,7 @@ export const servicesPage = {
       {
         question: 'How do we work together and get paid?',
         answer:
-          'We start with a quick conversation over message, agree the scope, timeline and payment terms in a written spec, and then I build in slices you can try as we go.',
+          'We start with a discovery call, agree the scope, timeline and payment terms in a written spec, and then I build in slices you can try as we go.',
       },
     ],
   },

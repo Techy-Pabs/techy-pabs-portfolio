@@ -7,6 +7,8 @@ export const site = {
   owner: 'Abraham Bassey',
   email: 'basseyabraham988@gmail.com',
   whatsapp: 'https://wa.me/2347084361745',
+  // "Prefer a call?" on the Contact page. Swap for a Cal.com or Calendly link here when there is one.
+  callLink: `https://wa.me/2347084361745?text=${encodeURIComponent("Hi Abraham, I'd like to book a call about a project.")}`,
   github: 'https://github.com/Techy-Pabs',
   // Still to be supplied. Empty links are left out until filled in.
   linkedin: '',
