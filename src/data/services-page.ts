@@ -14,7 +14,10 @@ export const servicesPage = {
   process: {
     title: 'How a project runs.',
     steps: [
-      { title: 'Discovery call', text: 'We talk through the problem, your users and what success looks like.' },
+      {
+        title: 'First conversation',
+        text: 'We talk through the problem, your users and what success looks like, over WhatsApp, email or Upwork messages.',
+      },
       { title: 'Written spec', text: 'Features, data model and endpoints agreed in writing before any code.' },
       { title: 'Build in slices', text: "Working pieces you can try early, each one tested before it's shown." },
       { title: 'Launch and handover', text: 'Live deploy, API docs and a README, so the system is truly yours.' },
@@ -63,10 +66,10 @@ export const servicesPage = {
       {
         question: 'How do we work together and get paid?',
         answer:
-          'We start with a discovery call, agree the scope, timeline and payment terms in a written spec, and then I build in slices you can try as we go.',
+          'We start with a quick conversation over message, agree the scope, timeline and payment terms in a written spec, and then I build in slices you can try as we go.',
       },
     ],
   },
 
-  closing: { heading: "Not sure which service fits? Let's talk it through.", button: 'Book a call' },
+  closing: { heading: "Not sure which service fits? Let's talk it through.", button: 'Send a message' },
 };
