@@ -6,7 +6,7 @@ The approved mockups are in `design/mockups/` (desktop at 1440 px wide and phone
 
 ## Stack
 
-- Astro (latest stable), static output, deployed on Vercel
+- Astro (latest stable), static output, deployed on Vercel at https://techy-pabs-portfolio.vercel.app (set as `site` in `astro.config.mjs` and `url` in `src/site.ts`; a custom domain changes those two lines only)
 - Tailwind CSS, with the design tokens below set in the theme
 - Fonts self hosted with Fontsource packages, not loaded from Google
 - Content collections in Markdown for projects and services, so new work is added as files, never by editing page code
@@ -78,12 +78,21 @@ The first project entry is ShopAssist: timeline 3 weeks, October to November 202
 - Home: headline words rise in on load; the terminal card types its lines in order; the capabilities strip scrolls slowly, pauses on hover, and has a pause/play button (keyboard focusable, at least 44 px, labelled "Pause scrolling" / "Play scrolling", not shown under reduced motion) so keyboard and touch users can stop it; service cards lift on hover; the featured project's screens fan apart as it scrolls into view.
 - Clicking a project carries its image into the case study page. This uses the browser's own cross-document view transitions (`@view-transition` in `global.css` plus a shared `view-transition-name` on the cover in the home card, the Work row and the case study hero), not Astro's client router, so pages stay plain multi-page HTML and every page script keeps working. Browsers without support load the page normally.
 - Case study: the parts reveal in turn; the diagram draws step by step as it scrolls into view; quality numbers count up once (screen readers always get the final value).
-- Scroll animations use GSAP's ScrollTrigger through `src/lib/motion.ts`: `gsap.from()` only, so content is fully visible without JavaScript, and each tween clears its inline styles when it finishes so the stylesheet takes over again.
+- Scroll animations use GSAP's ScrollTrigger: `gsap.from()` only, so content is fully visible without JavaScript, and each tween clears its inline styles when it finishes so the stylesheet takes over again. GSAP (`src/lib/gsap.ts`) is not part of the first page load: `whenNear()` in `src/lib/motion.ts` downloads it when an animated section comes within half a screen of view, never under reduced motion, and leaves sections that are already on screen (e.g. after a `#section` link) untouched.
 
 ## Quality bar
 
-Lighthouse 95 or higher for performance, accessibility, best practices and SEO; no horizontal scroll at 390 px; text contrast at least 4.5:1; every image has alt text; page titles, descriptions and a social preview image on every page.
+Lighthouse 95 or higher for performance, accessibility, best practices and SEO; no horizontal scroll at 390 px; text contrast at least 4.5:1 (purely decorative lettering, like the footer wordmark, is drawn with CSS so it isn't page text); every image has alt text; page titles, descriptions and a social preview image on every page.
+
+## SEO and launch
+
+- Every page has a canonical address (ending in "/", matching the sitemap), Open Graph and Twitter card tags (`summary_large_image`, site name TechyPabs) and a 1200 by 630 preview image: `public/og-default.jpg`, or for case studies their own cover cropped to that size at build time. The 404 page is `noindex` instead.
+- `@astrojs/sitemap` writes `sitemap-index.xml` (without the 404 page); `/robots.txt` is built from `site` and points to it.
+- Structured data (JSON-LD, built in `src/lib/structured-data.ts`, only from facts already on the site): Person and ProfessionalService on the home page (sameAs lists GitHub, plus LinkedIn and Upwork once filled in), a Service on each service page, and a BreadcrumbList on service pages and case studies.
+- Icons: `public/favicon.svg` (the amber "tp" tile, letters drawn as shapes), `favicon.ico` (16, 32 and 48 px) and a 180 px `apple-touch-icon.png`.
+- `vercel.json` sends X-Content-Type-Options, Referrer-Policy, X-Frame-Options and a restrictive Permissions-Policy on every response. There is no Content-Security-Policy yet; see the README for why.
+- The main font (Outfit, Latin) is preloaded so the page is laid out once, with the real font.
 
 ## Still to come from Abraham
 
-Education and other journey milestones, certifications, logo, LinkedIn and Upwork links, a CV file, and the domain name.
+Education and other journey milestones, certifications, logo, LinkedIn and Upwork links, a CV file, and a custom domain name (if wanted).

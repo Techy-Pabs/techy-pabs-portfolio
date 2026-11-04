@@ -6,11 +6,13 @@ import ContactBlock from '../components/home/ContactBlock.astro';
 import FeaturedWork from '../components/home/FeaturedWork.astro';
 import Hero from '../components/home/Hero.astro';
 import ServicesSection from '../components/home/ServicesSection.astro';
+import { business, person } from '../lib/structured-data';
 ---
 
 <BaseLayout
   title="AI backend engineer for FastAPI, AI chatbots and LLM integration"
   description="Abraham Bassey is an AI backend engineer in Lagos building FastAPI backends, AI chatbots and LLM integrations for businesses worldwide, tested and deployed."
+  jsonLd={[person(), business()]}
 >
   <Hero />
   <CapabilitiesStrip />

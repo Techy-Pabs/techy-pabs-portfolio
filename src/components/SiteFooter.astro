@@ -110,18 +110,19 @@ const year = new Date().getFullYear();
   </div>
 
   <!--
-    Decorative wordmark, shown in full and hidden from screen readers. The wrapper is a size
-    container, so 22cqi is 22% of the content width: the word is about 4.41 times as wide as its
-    font size, so it fills about 97% of the width at every screen size without overflowing.
+    Decorative wordmark, shown in full. The wrapper is a size container, so 22cqi is 22% of the
+    content width: the word is about 4.41 times as wide as its font size, so it fills about 97%
+    of the width at every screen size without overflowing.
+    The letters come from CSS (::before), not the page text: it is pure decoration, so screen
+    readers skip it and contrast checks rightly don't treat its dark-on-black colour as text.
   -->
   <div class="container-site mt-8 pb-8 md:pb-10">
     <div class="@container">
-      <p
+      <div
         aria-hidden="true"
-        class="text-center text-[22cqi] leading-[1.1] font-bold tracking-heading whitespace-nowrap text-charcoal select-none"
+        class="text-center text-[22cqi] leading-[1.1] font-bold tracking-heading whitespace-nowrap text-charcoal select-none before:content-['techypabs']"
       >
-        techypabs
-      </p>
+      </div>
     </div>
   </div>
 </footer>

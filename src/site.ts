@@ -4,6 +4,8 @@ import portraitHero from './assets/portraits/portrait-hero.webp';
 
 export const site = {
   name: 'TechyPabs',
+  // The live address. Keep this the same as `site` in astro.config.mjs.
+  url: 'https://techy-pabs-portfolio.vercel.app',
   owner: 'Abraham Bassey',
   email: 'basseyabraham988@gmail.com',
   whatsapp: 'https://wa.me/2347084361745',

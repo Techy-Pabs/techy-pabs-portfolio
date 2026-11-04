@@ -32,9 +32,9 @@ const { quality } = Astro.props.project.data;
 </section>
 
 <script>
-  import { CLEAR, gsap, withMotion } from '../../lib/motion';
+  import { whenNear } from '../../lib/motion';
 
-  withMotion(() => {
+  whenNear(document.querySelector('[data-count]'), ({ gsap, CLEAR }) => {
     for (const el of document.querySelectorAll<HTMLElement>('[data-count]')) {
       const finalText = el.textContent?.trim() ?? '';
       // "350+" counts 0 → 350 and keeps the "+"; values without a leading number (like "Live") just fade in.

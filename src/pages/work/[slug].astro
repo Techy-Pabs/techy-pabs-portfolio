@@ -1,6 +1,7 @@
 ---
 // One case study template for every project. Astro builds a page per project at build time.
 import type { GetStaticPaths } from 'astro';
+import { getImage } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaseClosing from '../../components/case-study/CaseClosing.astro';
@@ -10,6 +11,7 @@ import CaseProblem from '../../components/case-study/CaseProblem.astro';
 import CaseQuality from '../../components/case-study/CaseQuality.astro';
 import CaseResults from '../../components/case-study/CaseResults.astro';
 import CaseUnderTheHood from '../../components/case-study/CaseUnderTheHood.astro';
+import { breadcrumbs } from '../../lib/structured-data';
 
 export const getStaticPaths = (async () => {
   const projects = await getCollection('projects');
@@ -20,11 +22,17 @@ const { project } = Astro.props;
 // The optional Markdown body: extra write-up shown after the results, when there is one.
 const { Content } = await render(project);
 const hasBody = Boolean(project.body?.trim());
+
+// The social preview is the project's own cover, cropped to the 1200 x 630 shape that apps expect.
+const socialImage = await getImage({ src: project.data.cover.src, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
 ---
 
 <BaseLayout
   title={`${project.data.title} case study: ${project.data.kind}`}
   description={`${project.data.title} case study: ${project.data.summary}`}
+  image={{ src: socialImage.src, alt: project.data.cover.alt }}
+  ogType="article"
+  jsonLd={[breadcrumbs(['Work', '/work/'], [project.data.title, `/work/${project.id}/`])]}
 >
   <CaseHero project={project} />
   <CaseProblem project={project} />

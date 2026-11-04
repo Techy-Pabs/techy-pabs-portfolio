@@ -8,6 +8,8 @@ import '@fontsource/roboto/latin-500.css';
 import '@fontsource/geist-mono/latin-400.css';
 import '@fontsource/geist-mono/latin-500.css';
 import '../styles/global.css';
+// Outfit is the main text font, so the browser is told to fetch it straight away (see <head>).
+import outfitLatin from '@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2?url';
 
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
@@ -17,10 +19,31 @@ interface Props {
   title: string;
   description: string;
   bodyClass?: string; // e.g. "bg-hero" for a page whose gradient runs behind the footer too
+  // Social preview image: a path on this site (e.g. an optimised cover) and its description.
+  image?: { src: string; alt: string };
+  ogType?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>[]; // structured data for search engines
+  noindex?: boolean; // e.g. the 404 page
 }
 
-const { title, description, bodyClass } = Astro.props;
+const {
+  title,
+  description,
+  bodyClass,
+  image = { src: '/og-default.jpg', alt: `${site.name}: AI backend engineering by ${site.owner}` },
+  ogType = 'website',
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
 const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
+
+// Full addresses, built from `site` in astro.config.mjs. Pages end in "/" to match the sitemap.
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonical = new URL(path, Astro.site).href;
+const imageUrl = new URL(image.src, Astro.site).href;
+
+// "<" is escaped so text inside the data can never close the <script> tag early.
+const toJson = (data: Record<string, unknown>) => JSON.stringify(data).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -28,11 +51,34 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={outfitLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#000000" />
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+
+    <!-- How the page looks when shared (Open Graph is used by most apps; Twitter/X reads its own tags). -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={image.alt} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={image.alt} />
+
+    {jsonLd.map((data) => <script is:inline type="application/ld+json" set:html={toJson(data)} />)}
   </head>
   <body class:list={['flex min-h-dvh flex-col', bodyClass]}>
     <a

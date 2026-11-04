@@ -72,10 +72,10 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
 </article>
 
 <script>
-  import { CLEAR, gsap, withMotion } from '../../lib/motion';
+  import { whenNear } from '../../lib/motion';
 
-  withMotion(() => {
-    for (const fan of document.querySelectorAll<HTMLElement>('[data-fan]')) {
+  for (const fan of document.querySelectorAll<HTMLElement>('[data-fan]')) {
+    whenNear(fan, ({ gsap, CLEAR }) => {
       const sides = fan.querySelectorAll<HTMLElement>('[data-fan-side]');
       gsap.from(sides, {
         // Start pulled in behind the cover and straight, then fan out to their CSS positions and tilts.
@@ -87,6 +87,6 @@ const [right, left] = parts.map((part) => part.image).filter((image) => image.sr
         clearProps: CLEAR,
         scrollTrigger: { trigger: fan, start: 'top 75%', once: true },
       });
-    }
-  });
+    });
+  }
 </script>

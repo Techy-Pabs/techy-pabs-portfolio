@@ -70,10 +70,10 @@ const backdrops = ['bg-amber', 'bg-light', 'bg-black'];
 </section>
 
 <script>
-  import { CLEAR, gsap, withMotion } from '../../lib/motion';
+  import { whenNear } from '../../lib/motion';
 
-  withMotion(() => {
-    for (const list of document.querySelectorAll<HTMLElement>('[data-reveal]')) {
+  for (const list of document.querySelectorAll<HTMLElement>('[data-reveal]')) {
+    whenNear(list, ({ gsap, CLEAR }) => {
       gsap.from(list.children, {
         y: 48,
         opacity: 0,
@@ -83,6 +83,6 @@ const backdrops = ['bg-amber', 'bg-light', 'bg-black'];
         clearProps: CLEAR,
         scrollTrigger: { trigger: list, start: 'top 80%', once: true },
       });
-    }
-  });
+    });
+  }
 </script>

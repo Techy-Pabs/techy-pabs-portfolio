@@ -10,6 +10,7 @@ import ServiceDeliverables from '../../components/services/ServiceDeliverables.a
 import ServiceHero from '../../components/services/ServiceHero.astro';
 import ServiceProof from '../../components/services/ServiceProof.astro';
 import { getServices } from '../../lib/services';
+import { breadcrumbs, service as serviceData } from '../../lib/structured-data';
 
 export const getStaticPaths = (async () => {
   const services = await getServices();
@@ -28,6 +29,10 @@ if (!project) throw new Error(`Proof project missing for ${service.id}`);
 <BaseLayout
   title={`${service.data.title} services`}
   description={`${service.data.title} by Abraham Bassey: ${service.data.summary}`}
+  jsonLd={[
+    serviceData({ title: service.data.title, summary: service.data.summary, slug: service.id }),
+    breadcrumbs(['Services', '/services/'], [service.data.title, `/services/${service.id}/`]),
+  ]}
 >
   <ServiceHero service={service} project={project} />
   <ServiceDeliverables service={service} />
