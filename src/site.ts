@@ -1,6 +1,7 @@
 // Site-wide settings. Change a link here and it updates everywhere it is used.
-import portraitAbout from './assets/portraits/portrait-about.webp';
-import portraitHero from './assets/portraits/portrait-hero.webp';
+import portraitAbout from './assets/portraits/portrait-about-watch.webp';
+import portraitHero from './assets/portraits/portrait-hero-jacket.webp';
+import portraitTeaser from './assets/portraits/portrait-teaser.webp';
 
 export const site = {
   name: 'TechyPabs',
@@ -41,9 +42,14 @@ export const heroStack = ['Python', 'FastAPI', 'PostgreSQL', 'RAG', 'LLM APIs', 
 // The scrolling strip under the hero.
 export const capabilities = ['RAG pipelines', 'LLM integration', 'Auth and security', 'Database design', 'Cloud deployment'];
 
+// The three cutout portraits: home hero, the About section on the home page, and the About page.
 export const portraits = {
-  hero: { src: portraitHero, alt: 'Abraham Bassey in a black T-shirt, looking at the camera.' },
-  about: { src: portraitAbout, alt: 'Abraham Bassey in a black sweatshirt, smiling slightly.' },
+  hero: { src: portraitHero, alt: 'Abraham Bassey in a black zip jacket, smiling at the camera.' },
+  teaser: { src: portraitTeaser, alt: 'Abraham Bassey in a black T-shirt, looking at the camera.' },
+  about: {
+    src: portraitAbout,
+    alt: 'Abraham Bassey in a black shirt and silver wristwatch, smiling with his hand by his temple.',
+  },
 };
 
 // Contact channels, in order. Channels without a link yet are skipped.
