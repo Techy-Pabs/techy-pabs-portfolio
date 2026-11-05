@@ -20,7 +20,7 @@ const terminalStart = headline.length * wordDelay + 400; // terminal starts once
 ---
 
 <section class="overflow-x-clip bg-hero pt-[121px] md:pt-[153px]">
-  <div class="container-site grid items-end gap-x-10 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,396px)]">
+  <div class="container-site grid items-end gap-x-10 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,396px)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)]">
     <div class="lg:pb-24">
       <Pill>
         <span class="size-2 rounded-full bg-amber/50" aria-hidden="true"></span>
@@ -62,9 +62,9 @@ const terminalStart = headline.length * wordDelay + 400; // terminal starts once
       image={portraits.hero}
       frameClass="bg-amber"
       frameTop="32%"
-      sizes="(min-width: 1024px) 396px, (min-width: 760px) 396px, calc(100vw - 72px)"
+      sizes="(min-width: 1280px) 460px, (min-width: 760px) 396px, calc(100vw - 72px)"
       eager
-      class="ml-auto w-[calc(100%-24px)] max-w-[396px] md:mx-auto lg:mr-0"
+      class="ml-auto w-[calc(100%-24px)] max-w-[396px] md:mx-auto lg:mr-0 xl:w-full xl:max-w-[460px]"
     >
       {
         latest?.data.terminal && (
@@ -103,9 +103,10 @@ const terminalStart = headline.length * wordDelay + 400; // terminal starts once
       {
         latest && (
           // Sits to the right of the head; hidden on phones, where there is no room beside the face.
+          // From 1280 px the portrait is wider, so the tag sticks out a little less (4%) to stay on screen.
           <a
             href={`/portfolio/${latest.id}`}
-            class="absolute top-[-1%] -right-[6%] hidden rounded-xl border border-line bg-charcoal/85 px-4 py-2.5 shadow-xl shadow-black/50 backdrop-blur transition-colors hover:border-amber md:block"
+            class="absolute top-[-1%] -right-[6%] hidden rounded-xl xl:-right-[4%] border border-line bg-charcoal/85 px-4 py-2.5 shadow-xl shadow-black/50 backdrop-blur transition-colors hover:border-amber md:block"
           >
             <span class="block font-mono text-[10px] tracking-widest text-text-muted uppercase">Latest ship</span>
             <span class="block text-[15px] font-semibold text-white">
