@@ -99,6 +99,15 @@
 @layer base {
   html {
     @apply bg-black font-sans text-white antialiased;
+    /*
+      The fixed nav bar covers the top of the window (80 px + 1 px border on phones, 96 + 1 from
+      760 px up). This keeps the skip link, #section links and keyboard focus from landing under it.
+    */
+    scroll-padding-top: 81px;
+
+    @variant md {
+      scroll-padding-top: 97px;
+    }
   }
 
   h1,

@@ -21,10 +21,15 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
 
 <!--
   One full width bar: the gradient and bottom border span the viewport, the contents stay inside
-  container-site. It sits over the top of each page (absolute); every hero's top padding starts
-  its content below the bar.
+  container-site. It stays fixed to the top while the page scrolls underneath; every hero's top
+  padding starts its content below the bar, and html's scroll-padding-top (global.css) keeps
+  in-page links and keyboard focus from landing under it.
+  z-30 keeps it above page content (the highest there is z-10). The phone menu is a modal <dialog>,
+  which the browser draws in its own top layer, so the bar never covers it.
+  view-transition-name: page-to-page transitions treat the bar as its own layer, so it stays still
+  (and above a project cover moving into a case study) while the page content changes.
 -->
-<header class="absolute inset-x-0 top-0 z-30 border-b border-line bg-[linear-gradient(180deg,#000000_0%,#1c1d20_100%)]">
+<header class="fixed inset-x-0 top-0 z-30 border-b [view-transition-name:site-header] border-line bg-[linear-gradient(180deg,#000000_0%,#1c1d20_100%)]">
   <div class="container-site flex h-20 items-center justify-between gap-6 md:grid md:h-24 md:grid-cols-[1fr_auto_1fr]">
     <Logo compactOnTablet />
 
