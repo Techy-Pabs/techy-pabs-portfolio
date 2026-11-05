@@ -1,5 +1,6 @@
 ---
 import ArrowIcon from './ArrowIcon.astro';
+import Button from './Button.astro';
 import Logo from './Logo.astro';
 import { navLinks, site } from '../site';
 
@@ -18,13 +19,18 @@ const cta =
 const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
 ---
 
-<header class="absolute inset-x-0 top-0 z-30">
-  <div class="container-site flex items-center justify-between gap-6 py-6 md:grid md:grid-cols-[1fr_auto_1fr]">
+<!--
+  One full width bar: the gradient and bottom border span the viewport, the contents stay inside
+  container-site. It sits over the top of each page (absolute); every hero's top padding starts
+  its content below the bar.
+-->
+<header class="absolute inset-x-0 top-0 z-30 border-b border-line bg-[linear-gradient(180deg,#000000_0%,#1c1d20_100%)]">
+  <div class="container-site flex h-20 items-center justify-between gap-6 md:grid md:h-24 md:grid-cols-[1fr_auto_1fr]">
     <Logo compactOnTablet />
 
-    <!-- Desktop: links in an outlined pill, centred on the page. -->
+    <!-- Desktop: plain text links, centred. The current page is amber. -->
     <nav aria-label="Main" class="hidden md:block">
-      <ul class="flex items-center gap-1 rounded-full border border-line p-1">
+      <ul class="flex items-center gap-6 lg:gap-10">
         {
           navLinks.map((link) => (
             <li>
@@ -32,8 +38,8 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
                 href={link.href}
                 aria-current={isCurrent(link.href) ? 'page' : undefined}
                 class:list={[
-                  'flex min-h-11 items-center rounded-full px-4 text-[15px] transition-colors lg:px-5',
-                  isCurrent(link.href) ? 'bg-amber font-semibold text-black' : 'text-text-soft hover:text-white',
+                  'flex min-h-11 items-center text-[17px] font-medium whitespace-nowrap transition-colors hover:text-amber',
+                  isCurrent(link.href) ? 'text-amber' : 'text-light',
                 ]}
               >
                 {link.label}
@@ -44,19 +50,16 @@ const ctaTarget = cta?.external ? { target: '_blank', rel: 'noopener' } : {};
       </ul>
     </nav>
 
-    {
-      cta ? (
-        <a
-          href={cta.href}
-          {...ctaTarget}
-          class="hidden min-h-11 items-center justify-self-end rounded-full whitespace-nowrap border border-amber px-5 font-button text-[15px] font-medium tracking-label text-amber transition-colors hover:bg-amber hover:text-black md:inline-flex"
-        >
-          {cta.label}
-        </a>
-      ) : (
-        <span class="hidden md:block" aria-hidden="true" />
-      )
-    }
+    <!-- Desktop: filled call-to-action button. -->
+    <div class="hidden justify-self-end md:block">
+      {
+        cta && (
+          <Button href={cta.href} external={cta.external} arrow class="whitespace-nowrap">
+            {cta.label}
+          </Button>
+        )
+      }
+    </div>
 
     <!-- Phone: round menu button that opens the full screen menu below. -->
     <button
